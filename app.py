@@ -9,6 +9,8 @@ import dash
 from app_def import dash_app
 from coronus.pages import graphs
 
+server = dash_app.server
+
 dash_app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     dcc.Link('[Home]', href='/'),
