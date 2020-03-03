@@ -1,16 +1,14 @@
 import pandas as pd
 import numpy as np
 
-from six.moves.urllib.parse import quote
-
 import plotly.express as px
 import dash_html_components as html
 import dash_core_components as dcc
 from dash.dependencies import Input, Output, State
 
-from coronus.app import dash_app
+from app import dash_app
 
-from coronus.coronus.loading.frames import df_active, df_conf, df_dead, df_reco
+from ..loading.frames import df_active, df_conf, df_dead, df_reco
 
 
 def plot_interactive_df(df):

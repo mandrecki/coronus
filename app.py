@@ -6,7 +6,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
 import dash
-from coronus.coronus.pages import graphs
+from coronus.pages import graphs
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
