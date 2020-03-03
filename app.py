@@ -24,7 +24,7 @@ dash_app.layout = html.Div([
 
 
 layout = html.Div([
-    html.H1("Hello!")
+    html.H1("(ง`_´)ง")
 ])
 
 @dash_app.callback(
@@ -40,4 +40,4 @@ def display_page(pathname):
 
 
 if __name__ == '__main__':
-    dash_app.run_server(debug=True)
+    dash_app.run_server(debug=False)
