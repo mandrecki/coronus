@@ -6,7 +6,7 @@ import dash_html_components as html
 import dash_core_components as dcc
 from dash.dependencies import Input, Output, State
 
-from app import dash_app
+from app_def import dash_app
 
 from ..loading.frames import df_active, df_conf, df_dead, df_reco
 

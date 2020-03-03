@@ -6,13 +6,8 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
 import dash
+from app_def import dash_app
 from coronus.pages import graphs
-
-
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-dash_app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-dash_app.config.suppress_callback_exceptions = True
-
 
 dash_app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
@@ -40,4 +35,4 @@ def display_page(pathname):
 
 
 if __name__ == '__main__':
-    dash_app.run_server(debug=False)
+    dash_app.run_server(debug=True)
