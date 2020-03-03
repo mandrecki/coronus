@@ -18,7 +18,7 @@ for col in log_gr.iloc[:, 1:].columns:
     new_cols.update({col: col_vals})
 shifted_log_gr = pd.DataFrame(new_cols)
 shifted_log_gr.index = shifted_log_gr.index - 3
-shifted_log_gr.index.name = "days"
+shifted_log_gr.index.name = "days since peak growth"
 
 
 def plot_interactive_df(df, ylabel, legend_label):
