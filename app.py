@@ -3,27 +3,41 @@ import os
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output, State
+
+import dash
+from coronus.coronus.pages import graphs
+
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+dash_app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+dash_app.config.suppress_callback_exceptions = True
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-server = app.server
-
-app.layout = html.Div([
-    html.H2('Hello World'),
-    dcc.Dropdown(
-        id='dropdown',
-        options=[{'label': i, 'value': i} for i in ['LA', 'NYC', 'MTL']],
-        value='LA'
-    ),
-    html.Div(id='display-value')
+dash_app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    dcc.Link('[Home]', href='/'),
+    dcc.Link('[Graphs]', href='/graphs'),
+    html.Br(),
+    html.Div(id='page-content'),
 ])
 
-@app.callback(dash.dependencies.Output('display-value', 'children'),
-              [dash.dependencies.Input('dropdown', 'value')])
-def display_value(value):
-    return 'You have selected "{}"'.format(value)
+
+layout = html.Div([
+    html.H1("Hello!")
+])
+
+@dash_app.callback(
+    Output('page-content', 'children'),
+    [Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == '/':
+        return layout
+    elif pathname == '/graphs':
+        return graphs.layout
+    else:
+        return '404'
+
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    dash_app.run_server(debug=True)
