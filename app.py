@@ -11,13 +11,24 @@ from coronus.pages import graphs
 
 server = dash_app.server
 
+menu = html.Div([
+        dcc.Link('[Graphs]', href='/'),
+        # dcc.Link('[Graphs]', href='/graphs'),
+    ],
+    style={
+        'marginBottom': 50, 'marginTop': 25,
+        "width": "80%",
+    })
+
 dash_app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
-    dcc.Link('[Home]', href='/'),
-    dcc.Link('[Graphs]', href='/graphs'),
-    html.Br(),
-    html.Div(id='page-content'),
+    menu,
+    html.Div(id='page-content', style={
+        'marginBottom': 50, 'marginTop': 25,
+        "width": "80%",
+    }),
 ])
+
 
 
 layout = html.Div([
@@ -29,7 +40,7 @@ layout = html.Div([
     [Input('url', 'pathname')])
 def display_page(pathname):
     if pathname == '/':
-        return layout
+        return graphs.layout
     elif pathname == '/graphs':
         return graphs.layout
     else:

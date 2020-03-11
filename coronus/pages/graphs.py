@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 
-import plotly.express as px
 import dash_html_components as html
 import dash_core_components as dcc
 from dash.dependencies import Input, Output, State
@@ -9,48 +8,69 @@ from dash.dependencies import Input, Output, State
 from app_def import dash_app
 
 from ..loading.frames import df_active, df_conf, df_dead, df_reco
+from ..analysis.preprocessing import cases_to_growths
+from ..plotting.plots import plot_interactive_df
 
+# controls for the graph
+dd_options = {
+    "Select countries": [dict(label=x, value=x) for x in df_active.columns if df_conf[x].max() > 20],
+}
+dd_def_vals = {
+    "Select countries": ["Italy", "Republic of Korea", "UK", "Germany", "Spain"]
+}
 
-log_gr = np.log(df_active).reset_index().diff(1).replace([np.inf, -np.inf], np.nan)
-log_gr = log_gr.dropna(axis="columns", how="all")
-new_cols = {}
-for col in log_gr.iloc[:, 1:].columns:
-    col_vals = log_gr.loc[log_gr[col].idxmax()-3:, col].reset_index(drop=True)
-    new_cols.update({col: col_vals})
-shifted_log_gr = pd.DataFrame(new_cols)
-shifted_log_gr.index = shifted_log_gr.index - 3
-shifted_log_gr.index.name = "days since peak growth"
-
-
-def plot_interactive_df(df, ylabel, legend_label):
-    order = df.max().sort_values(ascending=False).index
-    df_plot = df[order.tolist()].reset_index()
-    df_plot = df_plot.melt(id_vars=[df.index.name], value_name=ylabel, var_name=legend_label)
-    fig = px.line(
-        data_frame=df_plot,
-        x=df.index.name,
-        y=ylabel,
-        color=legend_label,
+controls = [
+    html.Div(
+        # [html.Button("", id="dummy_button", hidden=True)]
+        # +
+        [
+            html.P([name + ":", dcc.Dropdown(id=name + "_dd", options=opts, multi=True, value=dd_def_vals[name])]) for name, opts in dd_options.items()
+        ],
+        style={"width": "25%", "float": "right", },
+        id="div_dd",
     )
-    return fig
-
+]
+    # [dcc.Checklist(
+    #             id="cases_checkbox",
+    #             options=[
+    #                 {'label': 'Log scale x', 'value': "log_x"},
+    #                 {'label': 'Log scale y', 'value': "log_y"},
+    #             ],
+    #             value=[],
+    #             labelStyle={'display': 'inline-block'})]
+    # +
+    # [
 
 plots = [
-    html.Br(),
+
     html.H3("Active cases across regions"),
-    dcc.Graph(figure=plot_interactive_df(df_active, "Cases", "region"),
-              id="cases_plot", style={"width": "95%", "display": "inline_block"}),
-    html.Br(),
-    html.H3("Growth rate (log)"),
-    html.H5("All timeseries shifted so that maximum is at t=0."),
-    html.H5("After 2-3 weeks rate is 0 - new cases = cures + deaths - from that point onwards an epidemy starts petering out."),
-    dcc.Graph(figure=plot_interactive_df(shifted_log_gr, "log growth", "region"),
-              id="cases_plot", style={"width": "95%", "display": "inline_block"}),
+    dcc.Graph(id="cases_plot", style={"width": "75%", "display": "inline_block"}),
+    html.H3("Growth rate"),
+    html.P("All timeseries shifted so that maximum is at t=0. After 2-3 weeks rate is 1 - new cases = cures + deaths - from that point onwards an epidemy starts petering out."),
+    dcc.Graph(id="growth_plot", style={"width": "75%", "display": "inline_block"}),
     html.Br(),
 ]
 
 
 layout = html.Div(
+    controls + \
     plots
 )
 
+@dash_app.callback(
+    [Output("cases_plot", "figure"), Output("growth_plot", "figure")],
+    [Input(name + "_dd", "value") for name in dd_options.keys()]
+)
+def make_plots(countries):
+    active_cases = df_active.copy()
+    if countries:
+        active_cases = active_cases[countries]
+    growths = cases_to_growths(active_cases)
+
+    cases_fig = plot_interactive_df(active_cases[growths.columns], "cases", " ", name_sort=True)
+    growths_fig = plot_interactive_df(growths, "growth", " ", name_sort=True)
+
+    cases_fig.update_layout(legend_orientation="h")
+    growths_fig.update_layout(legend_orientation="h")
+
+    return cases_fig, growths_fig
