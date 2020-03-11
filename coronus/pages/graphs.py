@@ -12,6 +12,7 @@ from ..loading.frames import df_active, df_conf, df_dead, df_reco
 
 
 log_gr = np.log(df_active).reset_index().diff(1).replace([np.inf, -np.inf], np.nan)
+log_gr = log_gr.dropna(axis="columns", how="all")
 new_cols = {}
 for col in log_gr.iloc[:, 1:].columns:
     col_vals = log_gr.loc[log_gr[col].idxmax()-3:, col].reset_index(drop=True)
