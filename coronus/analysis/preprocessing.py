@@ -3,13 +3,12 @@ import pandas as pd
 
 
 def cases_to_growths(df_active, smoothing, align_max=True, return_log=False):
-    filtered = df_active.copy()
-    # filtered[filtered<20] = np.nan
+    active = df_active.copy()
 
     if smoothing > 1:
-        filtered = filtered.rolling(smoothing, min_periods=1).apply(lambda x: x.sum()/x.notna().sum(), raw=False)
+        active = active.rolling(smoothing, min_periods=1).apply(lambda x: x.sum()/x.notna().sum(), raw=False)
 
-    log_gr = np.log(filtered).diff(1).replace([np.inf, -np.inf], np.nan)
+    log_gr = np.log(active).diff(1).replace([np.inf, -np.inf], np.nan)
     log_gr = log_gr.dropna(axis="columns", how="all")
 
     if align_max:
