@@ -3,6 +3,8 @@ import numpy as np
 
 import dash_html_components as html
 import dash_core_components as dcc
+import dash_daq as daq
+
 from dash.dependencies import Input, Output, State
 
 from app_def import dash_app
@@ -23,6 +25,15 @@ controls = [
     html.Div(
         # [html.Button("", id="dummy_button", hidden=True)]
         # +
+
+        [daq.NumericInput(
+            id="smoothing_growth",
+            label="smoothing",
+            min=1,
+            max=10,
+            value=1
+        )]
+        +
         [
             html.P([name + ":", dcc.Dropdown(id=name + "_dd", options=opts, multi=True, value=dd_def_vals[name])]) for name, opts in dd_options.items()
         ],
@@ -59,13 +70,13 @@ layout = html.Div(
 
 @dash_app.callback(
     [Output("cases_plot", "figure"), Output("growth_plot", "figure")],
-    [Input(name + "_dd", "value") for name in dd_options.keys()]
+    [Input(name + "_dd", "value") for name in dd_options.keys()] + [Input("smoothing_growth", "value")]
 )
-def make_plots(countries):
+def make_plots(countries, smoothing):
     active_cases = df_active.copy()
     if countries:
         active_cases = active_cases[countries]
-    growths = cases_to_growths(active_cases, return_log=False)
+    growths = cases_to_growths(active_cases, smoothing, return_log=False)
 
     cases_fig = plot_interactive_df(active_cases[growths.columns], "cases", " ", name_sort=True)
     growths_fig = plot_interactive_df(growths, "growth", " ", name_sort=True)
