@@ -26,17 +26,16 @@ controls = [
         # [html.Button("", id="dummy_button", hidden=True)]
         # +
 
+        [
+            html.P([name + ":", dcc.Dropdown(id=name + "_dd", options=opts, multi=True, value=dd_def_vals[name])]) for name, opts in dd_options.items()
+        ] +
         [daq.NumericInput(
             id="smoothing_growth",
             label="smoothing",
             min=1,
             max=10,
-            value=1
-        )]
-        +
-        [
-            html.P([name + ":", dcc.Dropdown(id=name + "_dd", options=opts, multi=True, value=dd_def_vals[name])]) for name, opts in dd_options.items()
-        ],
+            value=2
+        )],
         style={"width": "25%", "float": "right", },
         id="div_dd",
     )
