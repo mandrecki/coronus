@@ -18,41 +18,36 @@ dd_options = {
     "Select countries": [dict(label=x, value=x) for x in df_active.columns if df_conf[x].max() > 20],
 }
 dd_def_vals = {
-    "Select countries": ["Italy", "Republic of Korea", "UK", "Germany", "Spain"]
+    "Select countries": ["Italy", "Germany", "Spain", "Korea, South", "United Kingdom"]
 }
 
 controls = [
     html.Div(
-        # [html.Button("", id="dummy_button", hidden=True)]
-        # +
-
         [
             html.P([name + ":", dcc.Dropdown(id=name + "_dd", options=opts, multi=True, value=dd_def_vals[name])]) for name, opts in dd_options.items()
         ] +
-        [daq.NumericInput(
-            id="smoothing_growth",
-            label="smoothing",
-            min=1,
-            max=10,
-            value=2
-        )],
+        [
+            daq.NumericInput(
+                id="smoothing_growth",
+                label="smoothing",
+                min=1,
+                max=10,
+                value=2),
+            dcc.Checklist(
+                id="cases_checkbox",
+                options=[
+                    {'label': 'Log scale y', 'value': "log_y"},
+                    {'label': 'Align growths', 'value': "align"},
+                ],
+                value=["align"],
+                labelStyle={'display': 'inline-block'}),
+        ],
         style={"width": "25%", "float": "right", },
         id="div_dd",
     )
 ]
-    # [dcc.Checklist(
-    #             id="cases_checkbox",
-    #             options=[
-    #                 {'label': 'Log scale x', 'value': "log_x"},
-    #                 {'label': 'Log scale y', 'value': "log_y"},
-    #             ],
-    #             value=[],
-    #             labelStyle={'display': 'inline-block'})]
-    # +
-    # [
 
 plots = [
-
     html.H3("Active cases across regions"),
     dcc.Graph(id="cases_plot", style={"width": "75%", "display": "inline_block"}),
     html.H3("Daily growth of active cases"),
@@ -70,19 +65,27 @@ layout = html.Div(
 
 @dash_app.callback(
     [Output("cases_plot", "figure"), Output("growth_plot", "figure")],
-    [Input(name + "_dd", "value") for name in dd_options.keys()] + [Input("smoothing_growth", "value")]
+    [Input(name + "_dd", "value") for name in dd_options.keys()] \
+    + [Input("smoothing_growth", "value"), Input("cases_checkbox", "value")]
 )
-def make_plots(countries, smoothing):
+def make_plots(countries, smoothing, checkboxes):
+    align_growths = True if "align" in checkboxes else False
+    log_y = True if "log_y" in checkboxes else False
+
     active_cases = df_active.copy()
     if countries:
         active_cases = active_cases[countries]
-    growths = cases_to_growths(active_cases, smoothing, return_log=False)
+    growths = cases_to_growths(active_cases, smoothing, align_max=align_growths, return_log=False)
 
     cases_fig = plot_interactive_df(active_cases[growths.columns], "cases", " ", name_sort=True)
     growths_fig = plot_interactive_df(growths, "growth", " ", name_sort=True)
 
-    cases_fig.update_layout(legend_orientation="h")
-    growths_fig.update_layout(legend_orientation="h",
-                              yaxis={"tickformat": '.1{}'.format("%")})
+    cases_fig.update_layout(
+        legend_orientation="h",
+        yaxis_type="log" if log_y else None,
+    )
+    growths_fig.update_layout(
+        legend_orientation="h",
+        yaxis={"tickformat": '.1{}'.format("%")})
 
     return cases_fig, growths_fig
