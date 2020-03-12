@@ -9,12 +9,12 @@ def cases_to_growths(df_active, return_log=False):
     log_gr = log_gr.dropna(axis="columns", how="all")
     new_cols = {}
     for col in log_gr.iloc[:, 1:].columns:
-        col_vals = log_gr.loc[log_gr[col].idxmax() - 3:, col].reset_index(drop=True)
+        col_vals = log_gr.loc[log_gr[col].idxmax() - 4:, col].reset_index(drop=True)
         new_cols.update({col: col_vals})
     shifted_log_gr = pd.DataFrame(new_cols)
-    shifted_log_gr.index = shifted_log_gr.index - 3
+    shifted_log_gr.index = shifted_log_gr.index - 4
     shifted_log_gr.index.name = "days since peak growth"
     if return_log:
         return shifted_log_gr
     else:
-        return np.exp(shifted_log_gr)
+        return np.exp(shifted_log_gr) - 1

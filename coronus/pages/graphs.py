@@ -65,12 +65,13 @@ def make_plots(countries):
     active_cases = df_active.copy()
     if countries:
         active_cases = active_cases[countries]
-    growths = cases_to_growths(active_cases)
+    growths = cases_to_growths(active_cases, return_log=False)
 
     cases_fig = plot_interactive_df(active_cases[growths.columns], "cases", " ", name_sort=True)
     growths_fig = plot_interactive_df(growths, "growth", " ", name_sort=True)
 
     cases_fig.update_layout(legend_orientation="h")
-    growths_fig.update_layout(legend_orientation="h")
+    growths_fig.update_layout(legend_orientation="h",
+                              yaxis={"tickformat": '.1{}'.format("%")})
 
     return cases_fig, growths_fig
