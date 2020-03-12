@@ -55,8 +55,9 @@ plots = [
 
     html.H3("Active cases across regions"),
     dcc.Graph(id="cases_plot", style={"width": "75%", "display": "inline_block"}),
-    html.H3("Growth rate"),
-    html.P("All timeseries shifted so that maximum is at t=0. After 2-3 weeks rate is 1 - new cases = cures + deaths - from that point onwards an epidemy starts petering out."),
+    html.H3("Daily growth of active cases"),
+    html.P("All time series shifted so that maximum is at t=0. This is a moment when a country realises it needs to test more people. Previously hidden cases are uncovered which leads to an inflated growth estimate. "
+           "After 15-20 days growth halts: new cases = cures + deaths. Then the virus starts to (very slowly) disappear from the population."),
     dcc.Graph(id="growth_plot", style={"width": "75%", "display": "inline_block"}),
     html.Br(),
 ]
