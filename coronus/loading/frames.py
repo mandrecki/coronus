@@ -35,3 +35,4 @@ df_reco = load_country_values(url_reco)
 df_conf = load_country_values(url_conf)
 df_dead = load_country_values(url_dead)
 df_active = df_conf - df_reco - df_dead
+df_active = df_active.replace(0, np.nan)
