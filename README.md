@@ -1,8 +1,19 @@
 ## Setup
 
 1. Install Python 3.8
-2. `pip install -r requirements.txt`
-3. Configure git (you can add `--global` if you would like to set this for your
+
+2. Clone this repo
+```
+git clone git@github.com:mandrecki/coronus.git
+cd coronus
+```
+3. Setup your Python environment
+```
+virtualenv --python=/usr/bin/python3.8 venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+4. Configure git (you can add `--global` if you would like to set this for your
 entire systems, not just this repo):
 ```
 git config user.name "Your Name"
@@ -10,6 +21,14 @@ git config user.email "your@email"
 git config pull.rebase true
 git config branch.autosetuprebase always
 ```
+
+5. Run the app
+```
+source venv/bin/activate
+python app.py
+```
+
+6. Play with the graphs in browser at http://127.0.0.1:8050/
 
 ## Devel process
 
@@ -42,8 +61,10 @@ git push orign staging
 ```
 
 See if the page works [here](http://coronus-staging.herokuapp.com/).
-If it does, make a pull request to production on [github](https://github.com/mandrecki/coronus/compare/production...staging?expand=1).
-You want to merge into *production*, but first you want others to see your code and changes to the app. Describe your changes briefly and tag relevant coders.
+If it does, make a pull request to *production* on [github](https://github.com/mandrecki/coronus/compare/production...staging?expand=1).
+
+You want to merge into *production*, but first others see your code and test changes to the app.
+Describe the changes briefly and tag relevant coders as reviewers.
 
 
 
