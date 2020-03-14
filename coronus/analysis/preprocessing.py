@@ -20,7 +20,7 @@ def cases_to_growths(df_active, smoothing, align_max=True, return_log=False):
                 new_cols.update({col: col_vals})
         log_gr = pd.DataFrame(new_cols)
         log_gr.index = log_gr.index - 4
-        log_gr.index.name = "days since peak growth"
+        log_gr.index.name = "Days since peak growth"
 
     if return_log:
         return log_gr
