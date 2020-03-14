@@ -11,29 +11,28 @@ from coronus.pages import graphs
 
 server = dash_app.server
 
-menu = html.Div([
-        dcc.Link('[Graphs]', href='/'),
-        # dcc.Link('[Graphs]', href='/graphs'),
-    ],
-    style={
-        'marginBottom': 50, 'marginTop': 25,
-        "width": "80%",
-    })
+header = html.Header(className='main-header', children=[
+    html.Div(className='header-content', children=[
+        html.H1(["Predict the virus"]),
+        html.P("Explore the spread of COVID-19 and predict its impact", className='strapline')
+    ]),
+    html.Div(className='menu', children=[
+        dcc.Link('Explore', className='explore-link', href='/'),
+        dcc.Link('Predict', className='predict-link', href='/')
+    ])
+])
 
 dash_app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
-    menu,
-    html.Div(id='page-content', style={
-        'marginBottom': 50, 'marginTop': 25,
-        "width": "80%",
-    }),
+    header,
+    html.Div(id='page-content'),
 ])
-
 
 
 layout = html.Div([
     html.H1("(ง`_´)ง")
-])
+]
+
 
 @dash_app.callback(
     Output('page-content', 'children'),
