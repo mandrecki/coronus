@@ -18,7 +18,7 @@ dd_options = {
     "Select countries": [dict(label=x, value=x) for x in df_active.columns if df_conf[x].max() > 20],
 }
 dd_def_vals = {
-    "Select countries": ["Italy", "Germany", "Spain", "Korea, South", "United Kingdom"]
+    "Select countries": ["Italy", "Spain", "Korea, South", "United Kingdom"]
 }
 
 controls = [
