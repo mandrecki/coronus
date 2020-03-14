@@ -1,6 +1,17 @@
-## Devel process
+## Setup
 
-Have
+1. Install Python 3.8
+2. `pip install -r requirements.txt`
+3. Configure git (you can add `--global` if you would like to set this for your
+entire systems, not just this repo):
+```
+git config user.name "Your Name"
+git config user.email "your@email"
+git config pull.rebase true
+git config branch.autosetuprebase always
+```
+
+## Devel process
 
 Create your branch
 
