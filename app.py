@@ -10,6 +10,7 @@ from app_def import dash_app
 from coronus_web.pages import graphs
 
 server = dash_app.server
+dash_app.title = 'Predict the virus'
 
 header = html.Header(className='main-header', children=[
     html.Div(className='header-content', children=[
