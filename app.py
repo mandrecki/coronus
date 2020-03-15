@@ -7,7 +7,7 @@ from dash.dependencies import Input, Output, State
 
 import dash
 from app_def import dash_app
-from coronus.pages import graphs
+from coronus_web.pages import graphs
 
 server = dash_app.server
 
