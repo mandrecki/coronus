@@ -1,7 +1,7 @@
 .main-header {
     display: grid;
     grid-template-columns: auto 10em 60em 10em auto;
-    background: url('/assets/hero-5600.png');
+    background: url('/assets/hero-small.png');
     background-size: 100%;
     background-position: bottom;
     font-family: "Raleway";
