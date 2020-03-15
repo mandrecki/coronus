@@ -1,7 +1,7 @@
 import plotly.express as px
 
 
-def plot_interactive_df(df, ylabel, legend_label, name_sort=False):
+def plot_interactive_df(df, ylabel, legend_label, name_sort=False, color_map={}):
     if name_sort:
         order = sorted(df.columns)
     else:
@@ -14,6 +14,7 @@ def plot_interactive_df(df, ylabel, legend_label, name_sort=False):
         x=df.index.name,
         y=ylabel,
         color=legend_label,
+        color_discrete_map=color_map
     )
     fig.update_layout(margin={'t': 32})
     return fig
