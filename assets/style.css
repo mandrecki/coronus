@@ -64,7 +64,6 @@ body {
     grid-column-gap: 1em;
     grid-row-gap: 3em;
     width: 80%;
-    min-width: 70em;
     margin: 0 auto;
 }
 
@@ -142,7 +141,16 @@ body {
 
 @media (max-width: 680px) {
     .main-header {
-        font-size: 2em;
+        font-size: 3em;
+    }
+
+    .main-header p.strapline, .main-header .menu a {
+        font-size: 0.4em;
+    }
+
+    #page-content {
+        width: 95%;
+        font-size: 0.9em;
     }
 }
 
