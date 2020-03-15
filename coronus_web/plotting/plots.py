@@ -14,7 +14,8 @@ def plot_interactive_df(df, ylabel, legend_label, name_sort=False, color_map={})
         x=df.index.name,
         y=ylabel,
         color=legend_label,
-        color_discrete_map=color_map
+        color_discrete_map=color_map,
+        template="plotly_white",
     )
     fig.update_layout(margin={'t': 32})
     return fig
