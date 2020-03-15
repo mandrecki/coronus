@@ -15,4 +15,5 @@ def plot_interactive_df(df, ylabel, legend_label, name_sort=False):
         y=ylabel,
         color=legend_label,
     )
+    fig.update_layout(margin={'t': 0})
     return fig

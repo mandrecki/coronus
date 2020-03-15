@@ -13,6 +13,17 @@ from ..loading.frames import df_active, df_conf, df_dead, df_reco
 from ..analysis.preprocessing import cases_to_growths
 from ..plotting.plots import plot_interactive_df
 
+
+def plot(graph_id, title, description=None):
+    children = [
+        html.H3(title),
+        dcc.Graph(id=graph_id, className='graph')
+    ]
+    if description is not None:
+        children.insert(1, html.P(description))
+
+    return html.Div(className='graph-container', children=children)
+
 # controls for the graph
 dd_options = {
     "Select countries": [dict(label=x, value=x) for x in df_active.columns if df_conf[x].max() > 20],
@@ -21,48 +32,56 @@ dd_def_vals = {
     "Select countries": ["Italy", "Spain", "Korea, South", "United Kingdom"]
 }
 
+intro = [
+    html.P("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in justo elit. Praesent et turpis lacus. "
+           "Fusce elementum consequat egestas. Mauris convallis leo non nulla varius euismod. Cras luctus odio eget "
+           "placerat rhoncus. Curabitur elementum sit amet dui et iaculis. Fusce quis mauris hendrerit, varius purus "
+           "eu, aliquet libero. Vivamus eu odio ut dui finibus commodo. Ut et massa eu quam ullamcorper mollis. "
+           "Aenean eget urna eget nisi rhoncus vestibulum. ", className='intro')
+]
+
 controls = [
     html.Div(
         [
-            html.P([name + ":", dcc.Dropdown(id=name + "_dd", options=opts, multi=True, value=dd_def_vals[name])]) for name, opts in dd_options.items()
+            html.Div([
+                html.Span([name + ":"], className='value-select-label'),
+                dcc.Dropdown(id=name + "_dd", options=opts, multi=True, value=dd_def_vals[name])
+            ], className='value-select input-container')
+            for name, opts in dd_options.items()
         ] +
         [
-            daq.NumericInput(
-                id="smoothing_growth",
-                label="smoothing",
-                min=1,
-                max=10,
-                value=2),
             dcc.Checklist(
                 id="cases_checkbox",
+                className="input-container",
                 options=[
                     {'label': 'Log scale y', 'value': "log_y"},
                     {'label': 'Align growths', 'value': "align"},
                 ],
-                value=["align"],
-                labelStyle={'display': 'inline-block'}),
+                value=["align"]),
+            daq.NumericInput(
+                id="smoothing_growth",
+                className="input-container",
+                label="Smoothing",
+                labelPosition="top",
+                min=1,
+                max=10,
+                value=2)
         ],
-        style={"width": "25%", "float": "right", },
-        id="div_dd",
+        id="div_dd"
     )
 ]
 
 plots = [
-    html.H3("Active cases across regions"),
-    dcc.Graph(id="cases_plot", style={"width": "75%", "display": "inline_block"}),
-    html.H3("Daily growth of active cases"),
-    html.P("All time series shifted so that maximum is at t = 0. This is a moment when a  country realises it needs to test more people. "
-           "Previously hidden cases are uncovered which leads to an inflated growth estimate. "
-           "After 15-20 days growth halts: new cases = cures + deaths. Then the virus starts to (very slowly) disappear from the population."),
-    dcc.Graph(id="growth_plot", style={"width": "75%", "display": "inline_block"}),
-    html.Br(),
+    plot('cases_plot', 'Active cases across regions'),
+    plot('growth_plot', 'Daily growth of active cases',
+         "All time series shifted so that maximum is at t = 0. This is a moment when a  country realises it needs "
+         "to test more people. Previously hidden cases are uncovered which leads to an inflated growth estimate. "
+         "After 15-20 days growth halts: new cases = cures + deaths. Then the virus starts to (very slowly) disappear "
+         "from the population.")
 ]
 
 
-layout = html.Div(
-    controls + \
-    plots
-)
+layout = intro + controls + plots
 
 @dash_app.callback(
     [Output("cases_plot", "figure"), Output("growth_plot", "figure")],

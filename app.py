@@ -25,13 +25,13 @@ header = html.Header(className='main-header', children=[
 dash_app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     header,
-    html.Div(id='page-content'),
+    html.Div(id='page-content')
 ])
 
 
 layout = html.Div([
     html.H1("(ง`_´)ง")
-]
+])
 
 
 @dash_app.callback(

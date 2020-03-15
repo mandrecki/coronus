@@ -53,11 +53,69 @@
 }
 
 #page-content {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-column-gap: 1em;
+    grid-row-gap: 3em;
     width: 80%;
     min-width: 70em;
     margin: 0 auto;
 }
 
+#div_dd {
+    grid-column: span 12;
+    grid-row: span 1;
+    border: 1px solid #c0c0c0;
+    border-radius: 4px;
+    background: #f0f0f0;
+    padding: 2em;
+}
+
+.graph-container {
+    grid-column: span 12;
+    grid-row: span 1;
+}
+
+
 #page-content p {
     max-width: 45em;
+}
+
+#page-content .intro {
+    grid-column: span 12;
+    max-width: 100%;
+    font-size: 1.4em;
+    margin: 3em 0 2em 0;
+}
+
+.input-container {
+    max-width: 60em;
+    margin-bottom: 1em;
+    line-height: 2em;
+}
+
+.input-container label {
+    font-size: 1em;
+    margin-right: 1em;
+    margin-bottom: 0;
+}
+
+.input-container input[type=checkbox] {
+    height: 2em;
+    vertical-align: middle;
+    margin-right: 0.3em;
+}
+
+.value-select .value-select-label {
+    font-size: 1em;
+}
+
+#smoothing_growth > div {
+    flex-direction: row-reverse;
+    align-item: baseline;
+    justify-content: left;
+}
+
+.graph-container .graph {
+    margin-top: 2em;
 }
