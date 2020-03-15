@@ -9,7 +9,7 @@ from dash.dependencies import Input, Output, State
 
 from app_def import dash_app
 
-from ..loading.frames import df_active, df_conf, df_dead, df_reco
+from ..loading import df_active, df_conf, df_dead, df_reco, df_aggregations
 from ..analysis.preprocessing import cases_to_growths
 from ..plotting.plots import plot_interactive_df
 
