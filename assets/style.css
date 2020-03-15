@@ -1,0 +1,124 @@
+.main-header {
+    display: grid;
+    grid-template-columns: auto 10em 60em 10em auto;
+    background: url('/assets/hero-5600.png');
+    background-size: 100%;
+    background-position: bottom;
+    font-family: "Raleway";
+    padding-top: 15em;
+    padding-bottom: 20em;
+}
+
+.main-header .header-content {
+    grid-column: 2 / 5;
+    grid-row-start: 1;
+    font-size: 10em;
+    color: #d0d0d0;
+    margin-bottom: 0.3em;
+}
+
+.main-header h1 {
+    font-size: 1em;
+    text-align: center;
+    line-height: 0.9em;
+    margin: 0;
+}
+
+.main-header p.strapline {
+    font-size: 0.2em;
+    text-align: center;
+    color: #d0d0d0;
+}
+
+.main-header .menu {
+    grid-column: 3;
+    grid-row-start: 2;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-around;
+}
+
+.main-header .menu a {
+    display: block;
+    font-size: 3em;
+    color: #d0d0d0;
+    text-decoration: none;
+    padding-bottom: 0.2em;
+    line-height: 1.5em;
+    height: 1.5em;
+}
+
+.main-header .menu a:hover {
+    border-bottom: 3px solid #d0d0d0;
+}
+
+#page-content {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-column-gap: 1em;
+    grid-row-gap: 3em;
+    width: 80%;
+    min-width: 70em;
+    margin: 0 auto;
+}
+
+#div_dd {
+    grid-column: span 12;
+    grid-row: span 1;
+    border: 1px solid #c0c0c0;
+    border-radius: 4px;
+    background: #f0f0f0;
+    padding: 2em;
+}
+
+.graph-container {
+    grid-column: span 12;
+    grid-row: span 1;
+}
+
+
+#page-content p {
+    max-width: 45em;
+}
+
+#page-content .intro {
+    grid-column: span 12;
+    max-width: 100%;
+    font-size: 1.4em;
+    margin: 3em 0 2em 0;
+}
+
+.input-container {
+    max-width: 60em;
+    margin-bottom: 1em;
+    line-height: 2em;
+}
+
+.input-container label {
+    font-size: 1em;
+    margin-right: 1em;
+    margin-bottom: 0;
+}
+
+.input-container input[type=checkbox] {
+    height: 2em;
+    vertical-align: middle;
+    margin-right: 0.3em;
+}
+
+.value-select .value-select-label {
+    font-size: 1em;
+}
+
+#smoothing_growth > div {
+    flex-direction: row-reverse;
+    align-item: baseline;
+    justify-content: left;
+}
+
+#footer {
+    background: #333;
+    padding: 1em 0 3em 0;
+    color: #888;
+    text-align: center;
+}
