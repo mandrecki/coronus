@@ -22,10 +22,13 @@ header = html.Header(className='main-header', children=[
     ])
 ])
 
+footer = html.Div(id='footer', children=['♥♥♥deep-nearest-neighbours squooooood♥♥♥'])
+
 dash_app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     header,
-    html.Div(id='page-content')
+    html.Div(id='page-content'),
+    footer
 ])
 
 

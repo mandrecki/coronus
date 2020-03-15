@@ -119,3 +119,10 @@
 .graph-container .graph {
     margin-top: 2em;
 }
+
+#footer {
+    background: #333;
+    padding: 1em 0 3em 0;
+    color: #888;
+    text-align: center;
+}

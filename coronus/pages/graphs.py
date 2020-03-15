@@ -80,7 +80,6 @@ plots = [
          "from the population.")
 ]
 
-
 layout = intro + controls + plots
 
 @dash_app.callback(
