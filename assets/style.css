@@ -1,18 +1,24 @@
+body {
+    max-width: 2300px;
+    margin: 0 auto;
+}
+
 .main-header {
     display: grid;
-    grid-template-columns: auto 10em 60em 10em auto;
-    background: url('/assets/hero-5600.png');
+    grid-template-columns: auto 1em 6em 1em auto;
+    background: url('/assets/hero-2300.gif');
     background-size: 100%;
     background-position: bottom;
+    font-size: 10em;
     font-family: "Raleway";
-    padding-top: 15em;
-    padding-bottom: 20em;
+    padding-top: 1.5em;
+    padding-bottom: 2em;
+    margin-bottom: 3rem;
 }
 
 .main-header .header-content {
     grid-column: 2 / 5;
     grid-row-start: 1;
-    font-size: 10em;
     color: #d0d0d0;
     margin-bottom: 0.3em;
 }
@@ -40,7 +46,7 @@
 
 .main-header .menu a {
     display: block;
-    font-size: 3em;
+    font-size: 0.3em;
     color: #d0d0d0;
     text-decoration: none;
     padding-bottom: 0.2em;
@@ -85,7 +91,6 @@
     grid-column: span 12;
     max-width: 100%;
     font-size: 1.4em;
-    margin: 3em 0 2em 0;
 }
 
 .input-container {
@@ -121,4 +126,28 @@
     padding: 1em 0 3em 0;
     color: #888;
     text-align: center;
+}
+
+@media (max-width: 1600px) {
+    .main-header {
+        background-image: url('/assets/hero-1600.gif');
+    }
+}
+
+@media (max-width: 1300px) {
+    .main-header  {
+        font-size: 5em;
+    }
+}
+
+@media (max-width: 680px) {
+    .main-header {
+        font-size: 2em;
+    }
+}
+
+@media (max-width: 400px) {
+    .main-header {
+        background-image: url('/assets/hero-400.gif');
+    }
 }
