@@ -39,7 +39,7 @@ dd_def_vals = {
 
 intro = [
     plot("welcome_plot", "Global cases over time",
-         figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases"]], "number", " ",
+         figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases"]], "Number", " ",
                                     color_map={"Total cases": "lightgrey", "Active cases": "darkblue"})
     ),
     html.P("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in justo elit. Praesent et turpis lacus. "
