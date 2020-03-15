@@ -14,10 +14,15 @@ from ..analysis.preprocessing import cases_to_growths
 from ..plotting.plots import plot_interactive_df
 
 
-def plot(graph_id, title, description=None):
+def plot(graph_id, title, description=None, figure=None):
+    if figure is not None:
+        graph = dcc.Graph(id=graph_id, className='graph', figure=figure)
+    else:
+        graph = dcc.Graph(id=graph_id, className='graph')
+
     children = [
         html.H3(title),
-        dcc.Graph(id=graph_id, className='graph')
+        graph
     ]
     if description is not None:
         children.insert(1, html.P(description))
@@ -33,6 +38,10 @@ dd_def_vals = {
 }
 
 intro = [
+    plot("welcome_plot", "Global cases over time",
+         figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases"]], "Number", " ",
+                                    color_map={"Total cases": "lightgrey", "Active cases": "darkblue"})
+    ),
     html.P("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque in justo elit. Praesent et turpis lacus. "
            "Fusce elementum consequat egestas. Mauris convallis leo non nulla varius euismod. Cras luctus odio eget "
            "placerat rhoncus. Curabitur elementum sit amet dui et iaculis. Fusce quis mauris hendrerit, varius purus "
