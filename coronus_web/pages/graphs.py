@@ -39,7 +39,7 @@ dd_def_vals = {
 
 intro = [
     plot("welcome_plot", " ",
-         figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases"]], "Global Covid-19 cases", " ",
+         figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases"]], "Global COVID-19 cases", " ",
                                     color_map={"Total cases": "lightgrey", "Active cases": "darkblue"})
     ),
     html.P([
@@ -47,7 +47,7 @@ intro = [
         "Governments are now making crucial decisions that will affect nearly everybody on the planet. "
         "How much effort should be placed on preventing further spread? To what extent should we be willing to sacrifice stability of our economies? "
         "The challenge of balancing the trade-offs is excarbated by the uncertainty. \n\n"
-        "Some nations were unlucky to experience Covid-19 early, when little was known. "
+        "Some nations were unlucky to experience COVID-19 early, when little was known. "
         "But those who follow, should learn from their successes and mistakes. "
         "As data scientists we feel obligated to drive the uncertainty down and aggregate whatever insights may be valuable for the decision-makers. "
         "This site presents: "
