@@ -19,7 +19,8 @@ header = html.Header(className='main-header', children=[
     ]),
     html.Div(className='menu', children=[
         dcc.Link('Explore', className='explore-link', href='/'),
-        dcc.Link('Predict', className='predict-link', href='/')
+        dcc.Link('We predict', className='predict-link', href='/we-predict'),
+        dcc.Link('You predict', className='predict-link', href='/you-predict'),
     ])
 ])
 
@@ -46,6 +47,10 @@ def display_page(pathname):
         return graphs.layout
     elif pathname == '/graphs':
         return graphs.layout
+    elif pathname == '/we-predict':
+        return "Coming soon!"
+    elif pathname == '/you-predict':
+        return "Coming soon!"
     else:
         return '404'
 
