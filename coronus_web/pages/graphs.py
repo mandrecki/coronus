@@ -38,8 +38,8 @@ dd_def_vals = {
 }
 
 intro = [
-    plot("welcome_plot", "Global cases over time",
-         figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases"]], "  ", " ",
+    plot("welcome_plot", " ",
+         figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases"]], "Global Covid-19 cases", " ",
                                     color_map={"Total cases": "lightgrey", "Active cases": "darkblue"})
     ),
     html.P([
@@ -93,7 +93,7 @@ plots = [
 
     plot('cases_plot', 'Active cases across regions',
          "How many people will get infected in the next month depends on how many people carry the virus now, not in January. "
-         "That is why we focus our attention on the number of active cases and its evolution (rather than number of cases to date). "
+         "That is why we focus our attention on the number of active cases and its evolution (rather than the total number of cases to date). "
          "By considering active cases you will notice that the contagion is on the verge of receding in some countries (South Korea or Singapore). "
          "China is on a promising path towards recovery. "
          "Using the dropdown below you can compare how quickly the virus has spread through countries. "
