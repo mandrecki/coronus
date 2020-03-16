@@ -42,18 +42,22 @@ intro = [
          figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases"]], "Global COVID-19 cases", " ",
                                     color_map={"Total cases": "lightgrey", "Active cases": "darkblue"})
     ),
+    # TODO: Should this have a title?
+    # html.H1("Why predict?"),
+    # html.H1("Why we predict?"),
+    # html.H1("Our mission?"),
     html.P([
-        "We offer forecasts of the future extent of the pandemy and its impacts to aid the world in finding the best responses. "
-        "Governments are now making crucial decisions that will affect nearly everybody on the planet. "
+        "We use machine learning methodology to forecasts of the future extent and impact of the ongoing pandemy. "
+        "World's governments are now making crucial decisions that will affect nearly everybody on the planet. "
         "How much effort should be placed on preventing further spread? To what extent should we be willing to sacrifice stability of our economies? "
         "The challenge of balancing the trade-offs is excarbated by the uncertainty. \n\n"
         "Some nations were unlucky to experience COVID-19 early, when little was known. "
         "But those who follow, should learn from their successes and mistakes. "
         "As data scientists we feel obligated to drive the uncertainty down and aggregate whatever insights may be valuable for the decision-makers. "
-        "This site presents: "
-        "(1) progression of the contagion so far, "
-        "(2) predictive models developed using machine learning methodology, "
-        "(3) aggregation of predictions by its users (the wisdom of crowds).",
+        "Our research is divided into 3 sections:"
+        "Exploration - visualise the spread of the contagion so far;"
+        "Our models - see predictions made by our models;"
+        "Your predictions - provide your own predictions and compare against the wisdom of the crowds.",
     ],
         className='intro', style={'whiteSpace': 'pre-wrap'}),
 ]
@@ -91,7 +95,7 @@ controls = [
 
 plots = [
 
-    plot('cases_plot', 'Active cases across regions',
+    plot("cases_plot", 'Focus on the active cases',
          "How many people will get infected in the next month depends on how many people carry the virus now, not in January. "
          "That is why we focus our attention on the number of active cases and its evolution (rather than the total number of cases to date). "
          "By considering active cases you will notice that the contagion is on the verge of receding in some countries (South Korea or Singapore). "
@@ -99,9 +103,12 @@ plots = [
          "Using the dropdown below you can compare how quickly the virus has spread through countries. "
          "For countries with many weeks of history, we observe initial exponential growth that ultimately plateaus. "
          "We can try to predict this pattern for countries in earlier stages of epidemy. "
-         "Hint: Logarithmic scale helps when comparing countries with very different scales of the contagion (e.g. Spain and Portugal). "
+         "Hints: Logarithmic scale helps when comparing countries with very different scales of the contagion (e.g. Spain and Portugal). "
+         "When plotted on a log scale, exponential trends are straight lines - the steepness of the line corresponds to the growth rate. "
+         "You will notice that the curves corresponding to different regions are close to parallel (though not really straight)."
+         "That is because the growth rate is similar across countries. This implies we can leverage past data for prognoses. "
          ),
-    plot('growth_plot', 'Daily growth of active cases',
+    plot("growth_plot", "Daily growths",
          "All time series shifted so that maximum is at t = 0. This is a moment when a  country realises it needs "
          "to test more people. Previously hidden cases are uncovered which leads to an inflated growth estimate. "
          "After 15-20 days growth halts: new cases = cures + deaths. Then the virus starts to (very slowly) disappear "
