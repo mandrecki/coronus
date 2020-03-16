@@ -103,6 +103,9 @@ plots = [
          "Using the dropdown below you can compare how quickly the virus has spread through countries. "
          "For countries with many weeks of history, we observe initial exponential growth that ultimately plateaus. "
          "We can try to predict this pattern for countries in earlier stages of epidemy. "
+         
+         # TODO move to a separate g(r)ay paragraph
+         
          "Hints: Logarithmic scale helps when comparing countries with very different scales of the contagion (e.g. Spain and Portugal). "
          "When plotted on a log scale, exponential trends are straight lines - the steepness of the line corresponds to the growth rate. "
          "You will notice that the curves corresponding to different regions are close to parallel (though not really straight)."
