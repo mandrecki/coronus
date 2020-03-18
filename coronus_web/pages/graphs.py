@@ -62,8 +62,25 @@ intro = [
         className='intro', style={'whiteSpace': 'pre-wrap'}),
 ]
 
-controls = [
-    html.Div(
+plots = [
+
+    plot("cases_plot", 'Focus on the active cases',
+         "How many people will get infected in the next month depends on how many people carry the virus now, not in January. "
+         "That is why we focus our attention on the number of active cases and its evolution (rather than the total number of cases to date). "
+         "By considering active cases you will notice that the contagion is on the verge of receding in some countries (South Korea or Singapore). "
+         "China is on a promising path towards recovery. "
+         "Using the dropdown below you can compare how quickly the virus has spread through countries. "
+         "For countries with many weeks of history, we observe initial exponential growth that ultimately plateaus. "
+         "We can try to predict this pattern for countries in earlier stages of epidemy. "
+         
+         # TODO move to a separate g(r)ay paragraph
+         
+         "Hints: Logarithmic scale helps when comparing countries with very different scales of the contagion (e.g. Spain and Portugal). "
+         "When plotted on a log scale, exponential trends are straight lines - the steepness of the line corresponds to the growth rate. "
+         "You will notice that the curves corresponding to different regions are close to parallel (though not really straight)."
+         "That is because the growth rate is similar across countries. This implies we can leverage past data for prognoses. "
+         ),
+html.Div(
         [
             html.Div([
                 html.Span([name + ":"], className='value-select-label'),
@@ -90,27 +107,7 @@ controls = [
                 value=2)
         ],
         id="div_dd"
-    )
-]
-
-plots = [
-
-    plot("cases_plot", 'Focus on the active cases',
-         "How many people will get infected in the next month depends on how many people carry the virus now, not in January. "
-         "That is why we focus our attention on the number of active cases and its evolution (rather than the total number of cases to date). "
-         "By considering active cases you will notice that the contagion is on the verge of receding in some countries (South Korea or Singapore). "
-         "China is on a promising path towards recovery. "
-         "Using the dropdown below you can compare how quickly the virus has spread through countries. "
-         "For countries with many weeks of history, we observe initial exponential growth that ultimately plateaus. "
-         "We can try to predict this pattern for countries in earlier stages of epidemy. "
-         
-         # TODO move to a separate g(r)ay paragraph
-         
-         "Hints: Logarithmic scale helps when comparing countries with very different scales of the contagion (e.g. Spain and Portugal). "
-         "When plotted on a log scale, exponential trends are straight lines - the steepness of the line corresponds to the growth rate. "
-         "You will notice that the curves corresponding to different regions are close to parallel (though not really straight)."
-         "That is because the growth rate is similar across countries. This implies we can leverage past data for prognoses. "
-         ),
+    ),
     plot("growth_plot", "Daily growths",
          "All time series shifted so that maximum is at t = 0. This is a moment when a  country realises it needs "
          "to test more people. Previously hidden cases are uncovered which leads to an inflated growth estimate. "
@@ -118,7 +115,7 @@ plots = [
          "from the population.")
 ]
 
-layout = intro + controls + plots
+layout = intro + plots
 
 @dash_app.callback(
     [Output("cases_plot", "figure"), Output("growth_plot", "figure")],
