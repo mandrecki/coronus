@@ -44,7 +44,7 @@ intro = [
     ),
     # TODO: Should this have a heading?
     # html.H1("Why predict?"),
-    # html.H1("Why we predict?"),
+    html.H1("Why we predict?"),
     # html.H1("Our mission?"),
     html.P([
         "We use machine learning methodology to forecasts of the future extent and impact of the ongoing pandemy. "
