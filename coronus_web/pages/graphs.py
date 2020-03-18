@@ -4,12 +4,13 @@ import numpy as np
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_daq as daq
+import dash_table
 
 from dash.dependencies import Input, Output, State
 
 from app_def import dash_app
 
-from ..loading import df_active, df_conf, df_dead, df_reco, df_aggregations
+from ..loading import df_active, df_conf, df_dead, df_reco, df_aggregations, digest
 from ..analysis.preprocessing import cases_to_growths
 from ..plotting.plots import plot_interactive_df
 
@@ -38,7 +39,17 @@ dd_def_vals = {
 }
 
 intro = [
-    plot("welcome_plot", " ",
+        html.Div(className='graph-container',
+                 children=[
+                     dash_table.DataTable(
+                         id='table',
+                         columns=[{"name": i, "id": i} for i in digest.columns],
+                         data=digest.to_dict('records'),
+                         style_cell={
+                             'minWidth': '0px', 'maxWidth': '50px',
+                         }
+                     )]),
+        plot("welcome_plot", " ",
          figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases"]], "Global COVID-19 cases", " ",
                                     color_map={"Total cases": "lightgrey", "Active cases": "darkblue"})
     ),
@@ -80,7 +91,7 @@ plots = [
          "You will notice that the curves corresponding to different regions are close to parallel (though not really straight)."
          "That is because the growth rate is similar across countries. This implies we can leverage past data for prognoses. "
          ),
-html.Div(
+    html.Div(
         [
             html.Div([
                 html.Span([name + ":"], className='value-select-label'),
