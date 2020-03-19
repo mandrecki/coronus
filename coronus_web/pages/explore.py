@@ -37,11 +37,11 @@ def table_digest():
     digest_str["Date"] = digest_str["Date"].map(lambda x: x.date())
 
     schemes = [
-        px.colors.sequential.Greys_r[1:],
-        px.colors.diverging.RdYlGn_r[1:-1],
-        px.colors.diverging.RdYlGn_r[1:-1],
-        px.colors.diverging.RdYlGn_r[1:-1],
-        px.colors.diverging.RdYlGn_r[1:-1],
+        px.colors.sequential.Greys_r[2:-1],
+        px.colors.sequential.Greys_r[2:-1],
+        px.colors.diverging.RdYlGn_r[2:-2],
+        px.colors.diverging.RdYlGn_r[2:-2],
+        px.colors.diverging.RdYlGn_r[2:-2],
     ]
     levels = [pd.qcut(digest.reset_index()[col],
                       len(schemes[i]),
@@ -108,7 +108,7 @@ intro = [
     html.H1("Why we predict?"),
     # html.H1("Our mission?"),
     html.P([
-        "We use machine learning methodology to forecasts of the future extent and impact of the ongoing pandemy. "
+        "We use machine learning methodology to forecast the future extent and impact of the ongoing pandemy. "
         "World's governments are now making crucial decisions that will affect nearly everybody on the planet. "
         "How much effort should be placed on preventing further spread? To what extent should we be willing to sacrifice stability of our economies? "
         "The challenge of balancing the trade-offs is excarbated by the uncertainty. \n\n"
@@ -124,7 +124,7 @@ intro = [
 ]
 
 plots = [
-
+    # TODO make legends transparent
     plot("cases_plot", 'Focus on the active cases',
          "How many people will get infected in the next month depends on how many people carry the virus now, not in January. "
          "That is why we focus our attention on the number of active cases and its evolution (rather than the total number of cases to date). "
@@ -169,11 +169,9 @@ plots = [
         ],
         id="div_dd"
     ),
+    # TODO add explnation of the plot
     plot("growth_plot", "Daily growths",
-         "All time series shifted so that maximum is at t = 0. This is a moment when a  country realises it needs "
-         "to test more people. Previously hidden cases are uncovered which leads to an inflated growth estimate. "
-         "After 15-20 days growth halts: new cases = cures + deaths. Then the virus starts to (very slowly) disappear "
-         "from the population.")
+         "Fill me!")
 ]
 
 layout = intro + plots
