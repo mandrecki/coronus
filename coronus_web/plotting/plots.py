@@ -16,6 +16,20 @@ def plot_interactive_df(df, ylabel, legend_label, name_sort=False, color_map={})
         color=legend_label,
         color_discrete_map=color_map,
         template="plotly_white",
+        height=600,
     )
-    fig.update_layout(margin={'t': 32})
+    fig.update_layout(
+        margin={'t': 32},
+        yaxis={
+            "side": "right",
+        },
+        legend={
+            "x": 0,
+            "y": 1,
+        },
+        font={
+            "size": 16
+        },
+    )
+
     return fig

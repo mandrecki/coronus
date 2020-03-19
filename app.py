@@ -18,8 +18,9 @@ header = html.Header(className='main-header', children=[
         html.P("Explore the spread of COVID-19 and predict its impact", className='strapline')
     ]),
     html.Div(className='menu', children=[
-        dcc.Link('Explore', className='explore-link', href='/'),
-        dcc.Link('Predict', className='predict-link', href='/')
+        dcc.Link('Exploration', className='explore-link', href='/'),
+        dcc.Link('Our models', className='predict-link', href='/our-models'),
+        dcc.Link('Your predictions', className='predict-link', href='/your-predictions'),
     ])
 ])
 
