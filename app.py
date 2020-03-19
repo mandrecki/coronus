@@ -7,7 +7,9 @@ from dash.dependencies import Input, Output, State
 
 import dash
 from app_def import dash_app
-from coronus_web.pages import graphs
+from coronus_web.pages import explore
+from coronus_web.pages import we_predict
+from coronus_web.pages import you_predict
 
 server = dash_app.server
 dash_app.title = 'Predict the virus'
@@ -44,9 +46,11 @@ layout = html.Div([
     [Input('url', 'pathname')])
 def display_page(pathname):
     if pathname == '/':
-        return graphs.layout
-    elif pathname == '/graphs':
-        return graphs.layout
+        return explore.layout
+    elif pathname == '/our-models':
+        return we_predict.layout
+    elif pathname == '/your-predictions':
+        return you_predict.layout
     else:
         return '404'
 

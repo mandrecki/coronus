@@ -37,11 +37,11 @@ def table_digest():
     digest_str["Date"] = digest_str["Date"].map(lambda x: x.date())
 
     schemes = [
-        px.colors.sequential.Greys_r[1:],
-        px.colors.diverging.RdYlGn_r[1:-1],
-        px.colors.diverging.RdYlGn_r[1:-1],
-        px.colors.diverging.RdYlGn_r[1:-1],
-        px.colors.diverging.RdYlGn_r[1:-1],
+        px.colors.sequential.Greys_r[2:-1],
+        px.colors.diverging.RdYlGn_r[2:-2],
+        px.colors.diverging.RdYlGn_r[2:-2],
+        px.colors.diverging.RdYlGn_r[2:-2],
+        px.colors.diverging.RdYlGn_r[2:-2],
     ]
     levels = [pd.qcut(digest.reset_index()[col],
                       len(schemes[i]),
@@ -108,7 +108,7 @@ intro = [
     html.H1("Why we predict?"),
     # html.H1("Our mission?"),
     html.P([
-        "We use machine learning methodology to forecasts of the future extent and impact of the ongoing pandemy. "
+        "We use machine learning methodology to forecast the future extent and impact of the ongoing pandemy. "
         "World's governments are now making crucial decisions that will affect nearly everybody on the planet. "
         "How much effort should be placed on preventing further spread? To what extent should we be willing to sacrifice stability of our economies? "
         "The challenge of balancing the trade-offs is excarbated by the uncertainty. \n\n"
