@@ -13,8 +13,20 @@ from dash.dependencies import Input, Output, State
 from app_def import dash_app
 
 from ..loading import df_active, df_conf, df_dead, df_reco, df_aggregations
-from ..analysis.preprocessing import cases_to_growths
+from ..analysis.preprocessing import generate_gp_samples
 from ..plotting.plots import plot_interactive_df
+
+
+def generate_gp_figure():
+    forecast = generate_gp_samples(df_aggregations)
+    cmap = {col: "lightgrey" for col in forecast.columns}
+    cmap["observations"] = "green"
+    fig = plot_interactive_df(forecast, "Global active cases", " ", color_map=cmap)
+    fig = fig.update_layout(
+        showlegend=False,
+        yaxis_type="log",
+    )
+    return fig
 
 
 def plot(graph_id, title, description=None, figure=None):
@@ -35,11 +47,8 @@ def plot(graph_id, title, description=None, figure=None):
 
 intro = [
         plot("we_predict_plot", "Coming soon!",
-             figure=plot_interactive_df(
-                 df_aggregations[["Active cases", "Total cases"]], "Forecast", " ",
-                 color_map={"Total cases": "lightgrey", "Active cases": "darkblue"}
-             )
-    ),
+             figure=generate_gp_figure()
+             ),
     # TODO: Should this have a heading?
     html.P([
         "Optimising...",
