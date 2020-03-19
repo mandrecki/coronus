@@ -39,12 +39,9 @@ intro = [
         "Coming soon!",
     ],
         className='intro', style={'whiteSpace': 'pre-wrap'}),
+    html.A('Round 1 predictions',
+           href='https://forms.gle/u2Brxj8REmRo4zoT8/',
+           target="_blank")
 ]
 
-plots = [
-    dcc.Link('Round 1 predictions',
-             href='https://forms.gle/u2Brxj8REmRo4zoT8'),
-
-]
-
-layout = intro + plots
+layout = intro
