@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import plotly.express as px
+import plotly.graph_objects as go
 
 import dash_html_components as html
 import dash_core_components as dcc
@@ -13,6 +15,59 @@ from app_def import dash_app
 from ..loading import df_active, df_conf, df_dead, df_reco, df_aggregations, digest
 from ..analysis.preprocessing import cases_to_growths
 from ..plotting.plots import plot_interactive_df
+
+
+def table_digest():
+    total_cases_now = df_aggregations["Total cases"].iloc[1:]
+    cases_now = df_aggregations["Active cases"].iloc[1:]
+    cases_yesterday = df_aggregations["Active cases"].iloc[:-1]
+    new_cases = cases_now - cases_yesterday.values
+    digest = pd.DataFrame({
+        "Total cases": total_cases_now,
+        "Active cases": cases_now,
+        "Net new cases": new_cases,
+        "Growth": (100 * new_cases / cases_yesterday.values)
+    },
+        index=total_cases_now.index
+    )
+    digest = digest.sort_index(ascending=False)
+    digest_str = digest.applymap(lambda x: f"{x:,.0f}".format(int(x)))
+    digest_str["Growth"] = digest["Growth"].map(lambda x: "{:.1f}%".format(x))
+    digest_str = digest_str.reset_index()
+    digest_str["Date"] = digest_str["Date"].map(lambda x: x.date())
+
+    schemes = [
+        px.colors.sequential.Greys_r[1:-1],
+        px.colors.diverging.RdYlGn_r[2:-2],
+        px.colors.diverging.RdYlGn_r[2:-2],
+        px.colors.diverging.RdYlGn_r[2:-2],
+    ]
+    colors = [pd.qcut(digest[col], len(schemes[i]), labels=(range(len(schemes[i])))) for i, col in
+              enumerate(digest.columns)]
+    fig = go.Figure(
+        data=
+        [
+            go.Table(
+                header=dict(values=list(digest_str.columns),
+                line_color='white', fill_color='white',
+                align='center',
+                height=70,
+                font=dict(color='dimgrey', size=40)),
+                cells=dict(
+                    values=[digest_str[col] for col in digest_str.columns],
+                    fill_color=[np.array(schemes[x])[colors[x]] for x in range(len(colors))],
+                    align='center',
+                    height=70,
+                    font=dict(color='black', size=30)
+                )
+            )
+        ]
+    )
+    fig.update_layout(
+        height=700
+    )
+    graph = dcc.Graph(figure=fig)
+    return graph
 
 
 def plot(graph_id, title, description=None, figure=None):
@@ -40,15 +95,7 @@ dd_def_vals = {
 
 intro = [
         html.Div(className='graph-container',
-                 children=[
-                     dash_table.DataTable(
-                         id='table',
-                         columns=[{"name": i, "id": i} for i in digest.columns],
-                         data=digest.to_dict('records'),
-                         style_cell={
-                             'minWidth': '0px', 'maxWidth': '50px',
-                         }
-                     )]),
+                 children=[table_digest()]),
         plot("welcome_plot", " ",
          figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases"]], "Global COVID-19 cases", " ",
                                     color_map={"Total cases": "lightgrey", "Active cases": "darkblue"})

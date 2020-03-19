@@ -42,18 +42,3 @@ df_aggregations = pd.concat([
     df_dead.sum(axis=1).rename("Deaths"),
     df_reco.sum(axis=1).rename("Recoveries")
 ], axis=1)
-
-total_cases_now = df_aggregations["Total cases"]
-cases_now = df_aggregations["Active cases"]
-cases_yesterday = df_aggregations["Active cases"].iloc[:-1]
-new_cases = cases_now.iloc[1:]\
-            - cases_yesterday.values
-digest = pd.DataFrame({
-    "Total cases": total_cases_now,
-    "Active cases": cases_now,
-    "New cases": new_cases,
-    "Growth": (100*new_cases/cases_yesterday).map(lambda x: "{:.1f}%".format(x))
-    },
-    index=total_cases_now.index
-)
-digest = digest.sort_index(ascending=False)
