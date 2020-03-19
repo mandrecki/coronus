@@ -38,7 +38,7 @@ def table_digest():
 
     schemes = [
         px.colors.sequential.Greys_r[2:-1],
-        px.colors.diverging.RdYlGn_r[2:-2],
+        px.colors.sequential.Greys_r[2:-1],
         px.colors.diverging.RdYlGn_r[2:-2],
         px.colors.diverging.RdYlGn_r[2:-2],
         px.colors.diverging.RdYlGn_r[2:-2],
