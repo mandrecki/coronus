@@ -124,7 +124,7 @@ intro = [
 ]
 
 plots = [
-
+    # TODO make legends transparent
     plot("cases_plot", 'Focus on the active cases',
          "How many people will get infected in the next month depends on how many people carry the virus now, not in January. "
          "That is why we focus our attention on the number of active cases and its evolution (rather than the total number of cases to date). "
@@ -169,11 +169,9 @@ plots = [
         ],
         id="div_dd"
     ),
+    # TODO add explnation of the plot
     plot("growth_plot", "Daily growths",
-         "All time series shifted so that maximum is at t = 0. This is a moment when a  country realises it needs "
-         "to test more people. Previously hidden cases are uncovered which leads to an inflated growth estimate. "
-         "After 15-20 days growth halts: new cases = cures + deaths. Then the virus starts to (very slowly) disappear "
-         "from the population.")
+         "Fill me!")
 ]
 
 layout = intro + plots
