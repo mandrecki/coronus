@@ -35,8 +35,13 @@ def plot(graph_id, title, description=None, figure=None):
 
 intro = [
     # TODO: Should this have a heading?
+    html.H3("fill me please"),
     html.P([
-        "Coming soon!",
+        "Every two weeks we will release a set of questions relating to COVID-19 and its impact. The goal is twofold. "
+        "(1) We want to make your thoughts about this problem more concrete. Despite high uncertainty, current situation "
+        "requires decisiviness and resolve. It is easy to make broad predictions almost unverifiable, but usually it is not very useful. "
+        "Push yourself to focus on important detail. Know when you were wrong and adapt. Maybe even make bets with your friends?"
+        "(2) The ",
     ],
         className='intro', style={'whiteSpace': 'pre-wrap'}),
     html.A('Round 1 predictions',
