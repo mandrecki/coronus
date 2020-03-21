@@ -84,7 +84,7 @@ def plot(graph_id, title, description=None, figure=None):
         graph
     ]
     if description is not None:
-        children.insert(1, html.P(description))
+        children.insert(1, dcc.Markdown(description))
 
     return html.Div(className='graph-container', children=children)
 
@@ -132,7 +132,7 @@ plots = [
          "China is on a promising path towards recovery. "
          "Using the dropdown below you can compare how quickly the virus has spread through countries. "
          "For countries with many weeks of history, we observe initial exponential growth that ultimately plateaus. "
-         "We can try to predict this pattern for countries in earlier stages of epidemy. "
+         "We can try to predict this pattern for countries in earlier stages of epidemy. \n\n "
          
          # TODO move to a separate g(r)ay paragraph
          
@@ -170,10 +170,24 @@ plots = [
         id="div_dd"
     ),
     # TODO add explnation of the plot
-    plot("growth_plot", "Daily growths",
-         "Fill me!")
+    plot("growth_plot", "Monitor growth or decay",
+         "An epidemy is an exponential phenomenom. Everyday the number of active cases is multiplied by a factor. "
+         "If the virus is winning, the number is greater than 1. If we are winning, the number is less than 1. "
+         "In this plot, we present a daily percentage change in confirmed active cases. "
+         "The horizontal axis indicates the number of days since the ignition of the epidemy in a given region. "
+         "Initially, most areas see extremely high daily growths. The number of cases can increase by more than 100%. "
+         "This doesn't necessarily mean that the virus is spreading that quickly. In most cases, this number reflects "
+         "the fact that countries test their citizens more diligently. \n\n"
+         
+         "Over time the growth stabilises and gradually decays. Ultimately, it goes below 0% (see China) meaning that the virus recedes.  "
+         "This graph has the regions aligned on their initial outbreak - you can use that to predict future growths in countries "
+         "that have seen the outbreak only recently. Countries that are dealing with the virus for many weeks already can be "
+         "a good reference. \n\n"
+         ""
+         "Hint: you can tick/untick *align growths* to plot growths against days since outbreak or date. In the second case "
+         "the growth will match to the plot above. "
+         "")
 ]
-
 layout = intro + plots
 
 @dash_app.callback(
@@ -194,11 +208,9 @@ def make_plots(countries, smoothing, checkboxes):
     growths_fig = plot_interactive_df(growths, "Daily growth", " ", name_sort=True)
 
     cases_fig.update_layout(
-        # legend_orientation="h",
         yaxis_type="log" if log_y else None,
     )
     growths_fig.update_layout(
-        # legend_orientation="h",
         yaxis={"tickformat": '.1{}'.format("%")})
 
     return cases_fig, growths_fig
