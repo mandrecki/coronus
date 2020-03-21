@@ -4,6 +4,5 @@ function scrollToContent() {
     }
 
 $(document).ready(function() {
-    $(document).on('click', '.menu a', scrollToContent)
-
+    $(document).on('click', '.menu a', scrollToContent);
 });
