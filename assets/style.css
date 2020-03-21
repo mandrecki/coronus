@@ -7,6 +7,10 @@ h1, h2, h3, h4, h5, h6, p, div, span {
     color: #333;
 }
 
+/*
+ * Page scaffolding
+ */
+
 .main-header {
     display: grid;
     grid-template-columns: auto 1em 6em 1em auto;
@@ -73,6 +77,17 @@ h1, h2, h3, h4, h5, h6, p, div, span {
     width: 80%;
     margin: 0 auto;
 }
+
+#footer {
+    background: #333;
+    padding: 1em 0 3em 0;
+    color: #888;
+    text-align: center;
+}
+
+/*
+ * Explore
+ */
 
 #div_dd {
     grid-column: span 12;
@@ -169,12 +184,32 @@ h1, h2, h3, h4, h5, h6, p, div, span {
     justify-content: left;
 }
 
-#footer {
-    background: #333;
-    padding: 1em 0 3em 0;
-    color: #888;
-    text-align: center;
+/*
+ * You predict
+ */
+#page-content .predict-link {
+    display: inline-block;
+    grid-column: span 12;
+    font-size: 1.3em;
+    margin: 0 auto 3em auto;
+    padding: 0.75em 3em;
+    background: rgb(48,48,48);
+    background: linear-gradient(90deg, rgba(100,100,100,1) 0%, rgba(110,110,110,1) 83%, rgba(140,140,140,1) 100%);
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px #888;
 }
+
+#page-content .predict-link:after {
+    content: '\27a4';
+    position: relative;
+    right: -2em;
+}
+
+#page-content .predict-link:hover {
+    text-decoration: none;
+}
+
 
 @media (max-width: 1600px) {
     .main-header {
