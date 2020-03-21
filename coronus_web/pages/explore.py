@@ -66,6 +66,9 @@ def plot(graph_id, title, description=None, figure=None):
     else:
         graph = dcc.Graph(id=graph_id, className='graph')
 
+
+
+
     children = [
         html.H3(title),
         dcc.Loading(graph, style={"height": 500})
