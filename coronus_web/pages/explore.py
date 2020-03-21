@@ -1,3 +1,5 @@
+import datetime
+
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -47,30 +49,65 @@ def table_digest():
                       len(schemes[i]),
                       labels=(range(len(schemes[i]))))
               for i, col in enumerate(digest.reset_index().columns)]
-    fig = go.Figure(
-        data=
-        [
-            go.Table(
-                header=dict(values=list(digest_str.columns),
-                line_color='white', fill_color='white',
-                align='center',
-                height=60,
-                font=dict(color='dimgrey', size=30)),
-                cells=dict(
-                    values=[digest_str[col] for col in digest_str.columns],
-                    fill_color=[np.array(schemes[i])[color] for i, color in enumerate(levels)],
-                    align='center',
-                    height=50,
-                    font=dict(color='black', size=22)
-                )
-            )
-        ]
-    )
-    fig.update_layout(
-        height=500
-    )
-    graph = dcc.Graph(figure=fig)
-    return graph
+
+    latest_date = total_cases_now.index[-1]
+    active_cases_today = cases_now[-1]
+    active_cases_yesterday = cases_now[-2]
+    active_cases_perc_change = (100 * active_cases_today / active_cases_yesterday) - 100
+    total_cases_today = total_cases_now[-1]
+    total_cases_yesterday = total_cases_now[-2]
+    total_cases_perc_change = (100 * total_cases_today / total_cases_yesterday) - 100
+    return html.Div([
+        html.H1([
+            "Latest stats ",
+            html.Span("({})".format(latest_date.strftime('%Y-%m-%d')))
+        ]),
+        html.P([
+            "Active cases: ",
+            html.Span(f"{active_cases_today:,.0f}", className='today'),
+            ' ',
+            html.Span([
+                '(',
+                html.Span(f"{active_cases_perc_change:+.0f}%", className='percent-change'),
+                f" from {active_cases_yesterday:,.0f})"
+            ], className='yesterday')
+        ], className='active-cases'),
+        html.P([
+            "Total cases: ",
+            html.Span(f"{total_cases_today:,.0f}", className='today'),
+            ' ',
+            html.Span([
+                '(',
+                html.Span(f"{total_cases_perc_change:+.0f}%", className='percent-change'),
+                f" from {total_cases_yesterday:,.0f})"
+            ], className='yesterday')
+        ], className='total-cases')
+    ], className='stats-digest')
+
+    # fig = go.Figure(
+    #     data=
+    #     [
+    #         go.Table(
+    #             header=dict(values=list(digest_str.columns),
+    #             line_color='white', fill_color='white',
+    #             align='center',
+    #             height=60,
+    #             font=dict(color='dimgrey', size=30)),
+    #             cells=dict(
+    #                 values=[digest_str[col] for col in digest_str.columns],
+    #                 fill_color=[np.array(schemes[i])[color] for i, color in enumerate(levels)],
+    #                 align='center',
+    #                 height=50,
+    #                 font=dict(color='black', size=22)
+    #             )
+    #         )
+    #     ]
+    # )
+    # fig.update_layout(
+    #     height=500
+    # )
+    # graph = dcc.Graph(figure=fig)
+    # return graph
 
 
 def plot(graph_id, title, description=None, figure=None):
@@ -81,7 +118,7 @@ def plot(graph_id, title, description=None, figure=None):
 
     children = [
         html.H3(title),
-        graph
+        dcc.Loading(graph, style={"height": 500})
     ]
     if description is not None:
         children.insert(1, dcc.Markdown(description))
@@ -97,8 +134,7 @@ dd_def_vals = {
 }
 
 intro = [
-        html.Div(className='graph-container',
-                 children=[table_digest()]),
+        table_digest(),
         plot("welcome_plot", " ",
          figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases"]], "Global COVID-19 cases", " ",
                                     color_map={"Total cases": "lightgrey", "Active cases": "darkblue"})
