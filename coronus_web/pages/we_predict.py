@@ -51,7 +51,7 @@ intro = [
              ),
     # TODO: Should this have a heading?
     html.P([
-        "Optimising...",
+        "Optimising... Do not rely on these predictions. Learning in progress...",
     ],
         className='intro', style={'whiteSpace': 'pre-wrap'}),
 ]
