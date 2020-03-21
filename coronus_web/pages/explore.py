@@ -135,7 +135,7 @@ plots = [
         [
             html.Div([
                 html.Span([name + ":"], className='value-select-label'),
-                dcc.Dropdown(id=name + "_dd", options=opts, multi=True, value=dd_def_vals[name])
+                dcc.Dropdown(id=name + "_dd", options=opts, multi=True, value=dd_def_vals[name], persistence=True)
             ], className='value-select input-container')
             for name, opts in dd_options.items()
         ] +
@@ -147,7 +147,9 @@ plots = [
                     {'label': 'Log scale y', 'value': "log_y"},
                     {'label': 'Align growths', 'value': "align"},
                 ],
-                value=["align"]),
+                value=["align"],
+                persistence=True
+            ),
             daq.NumericInput(
                 id="smoothing_growth",
                 className="input-container",
@@ -155,7 +157,8 @@ plots = [
                 labelPosition="top",
                 min=1,
                 max=10,
-                value=2)
+                value=2,
+            )
         ],
         id="div_dd"
     ),
