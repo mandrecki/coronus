@@ -3,6 +3,10 @@ body {
     margin: 0 auto;
 }
 
+h1, h2, h3, h4, h5, h6, p, div, span {
+    color: #333;
+}
+
 .main-header {
     display: grid;
     grid-template-columns: auto 1em 6em 1em auto;
@@ -19,8 +23,11 @@ body {
 .main-header .header-content {
     grid-column: 2 / 5;
     grid-row-start: 1;
-    color: #d0d0d0;
     margin-bottom: 0.3em;
+}
+
+.main-header h1, .main-header p {
+    color: #d0d0d0;
 }
 
 .main-header h1 {
@@ -81,14 +88,12 @@ body {
     grid-row: span 1;
 }
 
-
-#page-content p {
-    max-width: 45em;
-}
-
 #page-content .intro {
     grid-column: span 12;
-    max-width: 100%;
+    whitespace: pre-wrap;
+}
+
+#page-content .intro p {
     font-size: 1.4em;
 }
 

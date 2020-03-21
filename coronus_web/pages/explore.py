@@ -90,23 +90,24 @@ intro = [
                                     color_map={"Total cases": "lightgrey", "Active cases": "darkblue"})
     ),
     # TODO: Should this have a heading?
-    # html.H1("Why predict?"),
-    html.H1("Why we predict?"),
-    # html.H1("Our mission?"),
-    html.P([
-        "We use machine learning methodology to forecast the future extent and impact of the ongoing pandemy. "
-        "World's governments are now making crucial decisions that will affect nearly everybody on the planet. "
-        "How much effort should be placed on preventing further spread? To what extent should we be willing to sacrifice stability of our economies? "
-        "The challenge of balancing the trade-offs is excarbated by the uncertainty. \n\n"
-        "Some nations were unlucky to experience COVID-19 early, when little was known. "
-        "But those who follow, should learn from their successes and mistakes. "
-        "As data scientists we feel obligated to drive the uncertainty down and aggregate whatever insights may be valuable for the decision-makers. "
-        "Our research is divided into three sections: "
-        "Exploration - visualise the spread of the contagion so far; "
-        "Our models - see predictions made by our models; "
-        "Your predictions - provide your own predictions and compare against the wisdom of the crowds.",
-    ],
-        className='intro', style={'whiteSpace': 'pre-wrap'}),
+    html.Div([
+        # html.H1("Why predict?"),
+        html.H1("Why we predict?"),
+        # html.H1("Our mission?"),
+        html.P([
+            "We use machine learning methodology to forecast the future extent and impact of the ongoing pandemy. "
+            "World's governments are now making crucial decisions that will affect nearly everybody on the planet. "
+            "How much effort should be placed on preventing further spread? To what extent should we be willing to sacrifice stability of our economies? "
+            "The challenge of balancing the trade-offs is excarbated by the uncertainty. \n\n"
+            "Some nations were unlucky to experience COVID-19 early, when little was known. "
+            "But those who follow, should learn from their successes and mistakes. "
+            "As data scientists we feel obligated to drive the uncertainty down and aggregate whatever insights may be valuable for the decision-makers. "
+            "Our research is divided into three sections: "
+            "Exploration - visualise the spread of the contagion so far; "
+            "Our models - see predictions made by our models; "
+            "Your predictions - provide your own predictions and compare against the wisdom of the crowds.",
+        ]),
+    ], className='intro')
 ]
 
 plots = [
