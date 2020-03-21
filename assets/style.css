@@ -130,15 +130,10 @@ body {
 .stats-digest .today {
   font-size: 1.5em;
   font-weight: 900;
-  color: #C0002A;
 }
 
 .stats-digest .yesterday {
   color: #777;
-}
-
-.stats-digest .yesterday .percent-change {
-  color: #E17F45;
 }
 
 .input-container {

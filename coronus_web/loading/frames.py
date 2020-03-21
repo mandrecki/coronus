@@ -42,3 +42,4 @@ df_aggregations = pd.concat([
     df_dead.sum(axis=1).rename("Deaths"),
     df_reco.sum(axis=1).rename("Recoveries")
 ], axis=1)
+df_perc_changes = df_aggregations.iloc[1:] / df_aggregations.iloc[:-1].values

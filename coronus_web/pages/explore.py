@@ -9,105 +9,55 @@ import dash_html_components as html
 import dash_core_components as dcc
 import dash_daq as daq
 import dash_table
+import stringcase
 
 from dash.dependencies import Input, Output, State
 
 from app_def import dash_app
 
-from ..loading import df_active, df_conf, df_dead, df_reco, df_aggregations
+from ..loading import df_active, df_conf, df_dead, df_reco, df_aggregations, df_perc_changes
 from ..analysis.preprocessing import cases_to_growths
 from ..plotting.plots import plot_interactive_df
 
+digest_color_scheme = px.colors.diverging.RdYlGn_r[2:-2]
+
+
+def get_quantiles(df, col):
+    return pd.qcut(df[col], len(digest_color_scheme), labels=range(len(digest_color_scheme)))
+
+
+df_aggregations_quantiles = {col: get_quantiles(df_aggregations, col) for col in df_aggregations}
+df_perc_changes_quantiles = {col: get_quantiles(df_perc_changes, col) for col in df_perc_changes}
+
+
+def digest_for(aggregation):
+    today = df_aggregations[aggregation][-1]
+    today_clr = digest_color_scheme[df_aggregations_quantiles[aggregation][-1]] if aggregation != 'Total cases' else None
+    yesterday = df_aggregations[aggregation][-2]
+    perc_change = df_perc_changes[aggregation][-1] * 100 - 100
+    perc_change_clr = digest_color_scheme[df_perc_changes_quantiles[aggregation][-1]]
+    return html.P([
+        f"{aggregation}: ",
+        html.Span(f"{today:,.0f}", className='today', style={'color': today_clr}),
+        ' ',
+        html.Span([
+            '(',
+            html.Span(f"{perc_change:+.0f}%", className='percent-change', style={'color': perc_change_clr}),
+            f" from {yesterday:,.0f})"
+        ], className='yesterday')
+    ], className=stringcase.spinalcase(aggregation))
+
 
 def table_digest():
-    total_cases_now = df_aggregations["Total cases"].iloc[1:]
-    cases_now = df_aggregations["Active cases"].iloc[1:]
-    cases_yesterday = df_aggregations["Active cases"].iloc[:-1]
-    new_cases = cases_now - cases_yesterday.values
-    digest = pd.DataFrame({
-        "Total cases": total_cases_now,
-        "Active cases": cases_now,
-        "Net new cases": new_cases,
-        "Growth": (100 * new_cases / cases_yesterday.values)
-    },
-        index=total_cases_now.index
-    )
-    digest = digest.sort_index(ascending=False)
-    digest_str = digest.applymap(lambda x: f"{x:,.0f}".format(int(x)))
-    digest_str["Growth"] = digest["Growth"].map(lambda x: "{:.1f}%".format(x))
-    digest_str = digest_str.reset_index()
-    digest_str["Date"] = digest_str["Date"].map(lambda x: x.date())
-
-    schemes = [
-        px.colors.sequential.Greys_r[2:-1],
-        px.colors.sequential.Greys_r[2:-1],
-        px.colors.diverging.RdYlGn_r[2:-2],
-        px.colors.diverging.RdYlGn_r[2:-2],
-        px.colors.diverging.RdYlGn_r[2:-2],
-    ]
-    levels = [pd.qcut(digest.reset_index()[col],
-                      len(schemes[i]),
-                      labels=(range(len(schemes[i]))))
-              for i, col in enumerate(digest.reset_index().columns)]
-
-    latest_date = total_cases_now.index[-1]
-    active_cases_today = cases_now[-1]
-    active_cases_yesterday = cases_now[-2]
-    active_cases_perc_change = (100 * active_cases_today / active_cases_yesterday) - 100
-    total_cases_today = total_cases_now[-1]
-    total_cases_yesterday = total_cases_now[-2]
-    total_cases_perc_change = (100 * total_cases_today / total_cases_yesterday) - 100
+    latest_date = df_aggregations.index[-1]
     return html.Div([
         html.H1([
             "Latest stats ",
-            html.Span("({})".format(latest_date.strftime('%Y-%m-%d')))
+            html.Span("({})".format(latest_date.strftime('%d %b %Y')))
         ]),
-        html.P([
-            "Active cases: ",
-            html.Span(f"{active_cases_today:,.0f}", className='today'),
-            ' ',
-            html.Span([
-                '(',
-                html.Span(f"{active_cases_perc_change:+.0f}%", className='percent-change'),
-                f" from {active_cases_yesterday:,.0f})"
-            ], className='yesterday')
-        ], className='active-cases'),
-        html.P([
-            "Total cases: ",
-            html.Span(f"{total_cases_today:,.0f}", className='today'),
-            ' ',
-            html.Span([
-                '(',
-                html.Span(f"{total_cases_perc_change:+.0f}%", className='percent-change'),
-                f" from {total_cases_yesterday:,.0f})"
-            ], className='yesterday')
-        ], className='total-cases')
+        digest_for('Active cases'),
+        digest_for('Total cases')
     ], className='stats-digest')
-
-    # fig = go.Figure(
-    #     data=
-    #     [
-    #         go.Table(
-    #             header=dict(values=list(digest_str.columns),
-    #             line_color='white', fill_color='white',
-    #             align='center',
-    #             height=60,
-    #             font=dict(color='dimgrey', size=30)),
-    #             cells=dict(
-    #                 values=[digest_str[col] for col in digest_str.columns],
-    #                 fill_color=[np.array(schemes[i])[color] for i, color in enumerate(levels)],
-    #                 align='center',
-    #                 height=50,
-    #                 font=dict(color='black', size=22)
-    #             )
-    #         )
-    #     ]
-    # )
-    # fig.update_layout(
-    #     height=500
-    # )
-    # graph = dcc.Graph(figure=fig)
-    # return graph
 
 
 def plot(graph_id, title, description=None, figure=None):
