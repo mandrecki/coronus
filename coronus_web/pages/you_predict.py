@@ -35,8 +35,14 @@ def plot(graph_id, title, description=None, figure=None):
 
 intro = [
     # TODO: Should this have a heading?
+    html.H3("What do you think will happen?"),
     html.P([
-        "Coming soon!",
+        "Every two weeks we will release a set of questions relating to COVID-19 and its impact. The goal is twofold.\n\n "
+        "(1) We want to make your thoughts about this problem more concrete. Despite the uncertainty, current situation "
+        "requires decisiviness and resolve. It is easy to make broad predictions, but those are rarely very useful. "
+        "Push yourself to focus on the important detail. Realise after you were wrong and adapt. Maybe even make bets with your friends!\n\n "
+        "(2) Your answers will contribute to \"wisdom of the crowds\". We will track how accurate community's opinions are "
+        "and how they change over time and in response to particular government interventions. "
     ],
         className='intro', style={'whiteSpace': 'pre-wrap'}),
     html.A('Round 1 predictions',
