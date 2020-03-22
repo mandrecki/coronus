@@ -40,9 +40,11 @@ intro = [
         html.P([
             "Every two weeks we will release a set of questions relating to COVID-19 and its impact. The goal is twofold: ",
             html.Br(),
+            html.Br(),
             "(1) We want to make your thoughts about this problem more concrete. Despite the uncertainty, current situation ",
             "requires decisiviness and resolve. It is easy to make broad predictions, but those are rarely very useful. ",
             "Push yourself to focus on the important detail. Realise after you were wrong and adapt. Maybe even make bets with your friends!",
+            html.Br(),
             html.Br(),
             "(2) Your answers will contribute to \"wisdom of the crowds\". We will track how accurate community's opinions are ",
             "and how they change over time and in response to particular government interventions. "
