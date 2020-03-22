@@ -26,7 +26,10 @@ header = html.Header(className='main-header', children=[
     ])
 ])
 
-footer = html.Div(id='footer', children=['♥♥♥deep-nearest-neighbours squooooood♥♥♥'])
+footer = html.Div(id='footer', children=[
+    # '♥♥♥deep-nearest-neighbours squooooood♥♥♥'
+    html.A("team@predictvirus.com", href="mailto:team@predictvirus.com", target="_blank")
+])
 
 dash_app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
