@@ -15,7 +15,7 @@ from dash.dependencies import Input, Output, State
 
 from app_def import dash_app
 
-from ..loading.frames import df_active, df_conf, df_dead, df_reco, df_aggregations, df_perc_changes, get_cases
+from ..loading.frames import geography, df_aggregations, df_perc_changes, get_cases
 from ..analysis.preprocessing import cases_to_growths
 from ..plotting.plots import plot_interactive_df
 from ..loading.download import GEO_LEVELS
@@ -59,6 +59,31 @@ def table_digest():
         digest_for('Active cases'),
         digest_for('Total cases')
     ], className='stats-digest')
+
+
+def make_map_figure():
+    # https://plot.ly/python/v3/animations/
+    active = get_cases("State", "active")
+
+    df_plot = np.log10(active).fillna(0)
+    df_plot = df_plot.unstack().reset_index()
+    df_plot.Date = df_plot.Date.map(lambda x: str(x.date()))
+    df_plot = df_plot.merge(geography[["State", "Lat", "Long", "Continent", "Country"]], on="State")
+    df_plot = df_plot.rename(columns={0: "Log10(Cases)"})
+
+    fig = px.scatter_mapbox(
+        data_frame=df_plot,
+        lat="Lat", lon="Long",
+        size="Log10(Cases)",
+        color="Continent",
+        hover_name="Country",
+        animation_frame="Date",
+        animation_group="State",
+        height=650,
+    )
+    fig.update_layout(mapbox_style="carto-positron",
+                      mapbox_zoom=0.5, mapbox_center={"lat": 20.0, "lon": 20.0})
+    return fig
 
 
 def plot(graph_id, title, description=None, figure=None):
@@ -177,10 +202,11 @@ plots = [
          ""
          "Hint: you can tick/untick *align growths* to plot growths against days since outbreak or date. In the second case "
          "the growth will match to the plot above. "
-         "")
+         ""),
+    plot("map_plot", "Spatial progression of the spread", figure=make_map_figure())
+
 ]
 layout = intro + plots
-
 
 @dash_app.callback(
     [Output("regions_dd", "options"), Output("regions_dd", "persistence")],
@@ -224,3 +250,5 @@ def make_plots(regions, smoothing, checkboxes, geo_level):
     )
 
     return cases_fig, growths_fig
+
+
