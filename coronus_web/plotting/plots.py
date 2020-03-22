@@ -1,13 +1,19 @@
 import plotly.express as px
 
 
-def plot_interactive_df(df, ylabel, legend_label, name_sort=False, color_map={}):
-    if name_sort:
+def plot_interactive_df(df, ylabel, legend_label, sort_by=None, color_map={}):
+    if sort_by is None:
+        df_plot = df.reset_index()
+    elif sort_by == "name":
         order = sorted(df.columns)
-    else:
+        df_plot = df[order].reset_index()
+    elif sort_by == "max_value":
         order = df.max().sort_values(ascending=False).index.tolist()
+        df_plot = df[order].reset_index()
+#     else:
+#         raise ValueError
 
-    df_plot = df[order].reset_index()
+
     df_plot = df_plot.melt(id_vars=[df.index.name], value_name=ylabel, var_name=legend_label)
     fig = px.line(
         data_frame=df_plot,
