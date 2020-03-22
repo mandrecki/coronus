@@ -202,8 +202,11 @@ def make_plots(countries, smoothing, checkboxes):
 
     cases_fig.update_layout(
         yaxis_type="log" if log_y else None,
+        legend={"bgcolor": "rgba(0,0,0,0)"},
     )
     growths_fig.update_layout(
-        yaxis={"tickformat": '.1{}'.format("%")})
+        yaxis={"tickformat": '.1{}'.format("%")},
+        legend={"bgcolor": "rgba(0,0,0,0)"}
+    )
 
     return cases_fig, growths_fig
