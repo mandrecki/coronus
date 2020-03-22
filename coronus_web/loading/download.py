@@ -11,22 +11,25 @@ urls = dict(
 GEO_LEVELS = [
     "State",
     "Country",
-    # "Continent"
-    "Global"
+    "Continent",
+    "Global",
 ]
 
 
 def get_continents():
-    filename = "../../data/country_to_continent.csv"
+    filename = "data/country_to_continent.csv"
     df = pd.read_csv(filename, encoding = "iso-8859-1")
     return df
 
 
 def append_continents(cases, continents):
-    df_cases_enriched = cases.merge(continents,
-                                       on='Country/Region',
-                                       how="left")
-    return df_cases_enriched
+    cases_with_continents = cases.merge(
+        continents,
+        on="Country",
+        how="left")
+
+    return cases_with_continents
+
 
 def get_raw_df(url):
     #     s = requests.get(url).content
@@ -58,14 +61,18 @@ def calculate_active(spacetime_dict):
 
 
 def get_frames():
-    raw = {count_type: get_raw_df(url) for count_type, url in urls.items()}
+    continents = get_continents()
 
+    cases_raw = {
+        case_type:
+            append_continents(get_raw_df(url), continents)
+        for case_type, url in urls.items()
+    }
 
-
-    geography = raw["confirmed"][["State", "Country", "Global",  "Lat", "Long"]]
+    geography = cases_raw["confirmed"][GEO_LEVELS + ["Lat", "Long"]]
     cases_by_geolevel = dict()
     for geolevel in GEO_LEVELS:
-        spacetime = {count_type: to_spacetime(raw[count_type], geolevel=geolevel) for count_type in raw.keys()}
+        spacetime = {count_type: to_spacetime(cases_raw[count_type], geolevel=geolevel) for count_type in cases_raw.keys()}
         spacetime["active"] = calculate_active(spacetime)
         cases_by_geolevel[geolevel] = spacetime
 

@@ -79,14 +79,6 @@ def plot(graph_id, title, description=None, figure=None):
 
     return html.Div(className='graph-container', children=children)
 
-# controls for the graph
-dd_options = {
-    "Select countries": [dict(label=x, value=x) for x in df_active.columns if df_conf[x].max() > 20],
-}
-dd_def_vals = {
-    "Select countries": ["Italy", "Spain", "Korea, South", "United Kingdom"]
-}
-
 intro = [
         table_digest(),
         plot("welcome_plot", " ",
