@@ -45,6 +45,18 @@ GEOLEVELS = [
 ]
 
 
+def get_continents():
+    filename = "../../data/country_to_continent.csv"
+    df = pd.read_csv(filename, encoding = "iso-8859-1")
+    return df
+
+
+def append_continents(cases, continents):
+    df_cases_enriched = cases.merge(continents,
+                                       on='Country/Region',
+                                       how="left")
+    return df_cases_enriched
+
 def get_raw_df(url):
     #     s = requests.get(url).content
     #     df = pd.read_csv(io.StringIO(s.decode('utf-8')))
