@@ -15,9 +15,10 @@ from dash.dependencies import Input, Output, State
 
 from app_def import dash_app
 
-from ..loading import df_active, df_conf, df_dead, df_reco, df_aggregations, df_perc_changes
+from ..loading.frames import df_active, df_conf, df_dead, df_reco, df_aggregations, df_perc_changes, get_cases
 from ..analysis.preprocessing import cases_to_growths
 from ..plotting.plots import plot_interactive_df
+from ..loading.download import GEO_LEVELS
 
 digest_color_scheme = px.colors.diverging.RdYlGn_r[2:-2]
 
@@ -162,7 +163,6 @@ plots = [
         ],
         id="div_dd"
     ),
-    # TODO add explnation of the plot
     plot("growth_plot", "Monitor growth or decay",
          "An epidemy is an exponential phenomenom. Everyday the number of active cases is multiplied by a factor. "
          "If the virus is winning, the number is greater than 1. If we are winning, the number is less than 1. "
