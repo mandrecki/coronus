@@ -135,10 +135,9 @@ plots = [
     html.Div(
         [
             html.Div([
-                html.Span([name + ":"], className='value-select-label'),
-                dcc.Dropdown(id=name + "_dd", options=opts, multi=True, value=dd_def_vals[name], persistence=True)
+                html.Span(["Select regions:"], className='value-select-label'),
+                dcc.Dropdown(id="regions_dd", multi=True)
             ], className='value-select input-container')
-            for name, opts in dd_options.items()
         ] +
         [
             dcc.Checklist(
@@ -150,6 +149,13 @@ plots = [
                 ],
                 value=["align"],
                 persistence=True
+            ),
+            dcc.RadioItems(
+                id="breakdown_radio",
+                options=[{"label": geo_level, "value": geo_level} for geo_level in GEO_LEVELS],
+                value="Country",
+                persistence=True,
+
             ),
             daq.NumericInput(
                 id="smoothing_growth",
@@ -183,18 +189,34 @@ plots = [
 ]
 layout = intro + plots
 
+
+@dash_app.callback(
+    [Output("regions_dd", "options"), Output("regions_dd", "persistence")],
+    [Input("breakdown_radio", "value")]
+)
+def make_dropdown(geo_level):
+    df_active = get_cases(geo_level, "active")
+    df_conf = get_cases(geo_level, "confirmed")
+    dd_options = [dict(label=x, value=x) for x in df_active.columns if df_conf[x].max() > 20]
+    return [dd_options, geo_level]
+
 @dash_app.callback(
     [Output("cases_plot", "figure"), Output("growth_plot", "figure")],
-    [Input(name + "_dd", "value") for name in dd_options.keys()] \
-    + [Input("smoothing_growth", "value"), Input("cases_checkbox", "value")]
+    [Input("regions_dd", "value")] \
+    + [Input("smoothing_growth", "value"), Input("cases_checkbox", "value")],
+    [State("breakdown_radio", "value")]
 )
-def make_plots(countries, smoothing, checkboxes):
+def make_plots(regions, smoothing, checkboxes, geo_level):
     align_growths = True if "align" in checkboxes else False
     log_y = True if "log_y" in checkboxes else False
 
-    active_cases = df_active.copy()
-    if countries:
-        active_cases = active_cases[countries]
+    active_cases = get_cases(geo_level, "active")
+    if regions:
+        active_cases = active_cases[regions]
+    else:
+        # hard limit to 10 regions
+        active_cases = active_cases.iloc[:, :10]
+
     growths = cases_to_growths(active_cases, smoothing, align_max=align_growths, return_log=False)
 
     cases_fig = plot_interactive_df(active_cases[growths.columns], "Active cases", " ", name_sort=True)
