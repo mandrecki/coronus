@@ -68,7 +68,7 @@ def make_map_figure():
     df_plot = np.log10(active).fillna(0)
     df_plot = df_plot.unstack().reset_index()
     df_plot.Date = df_plot.Date.map(lambda x: str(x.date()))
-    df_plot = df_plot.merge(geography[["State", "Lat", "Long", "Continent", "Country"]], on="State")
+    df_plot = df_plot.merge(geography[["State", "Lat", "Long", "Continent"]], on="State")
     df_plot = df_plot.rename(columns={0: "Log10(Cases)"})
 
     fig = px.scatter_mapbox(
@@ -76,13 +76,16 @@ def make_map_figure():
         lat="Lat", lon="Long",
         size="Log10(Cases)",
         color="Continent",
-        hover_name="Country",
+        hover_name="State",
+        hover_data=["Log10(Cases)"],
         animation_frame="Date",
         animation_group="State",
-        height=650,
+        height=600,
     )
     fig.update_layout(mapbox_style="carto-positron",
-                      mapbox_zoom=0.5, mapbox_center={"lat": 20.0, "lon": 20.0})
+                      mapbox_zoom=1, mapbox_center={"lat": 20.0, "lon": 20.0})
+    fig.update_layout(margin={"r": 20, "t": 0, "l": 20, "b": 0})
+
     return fig
 
 
@@ -97,7 +100,7 @@ def plot(graph_id, title, description=None, figure=None):
 
     children = [
         html.H3(title),
-        dcc.Loading(graph, style={"height": 500})
+        dcc.Loading(graph, style={"height": 600})
     ]
     if description is not None:
         children.insert(1, dcc.Markdown(description))
@@ -107,8 +110,8 @@ def plot(graph_id, title, description=None, figure=None):
 intro = [
         table_digest(),
         plot("welcome_plot", " ",
-         figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases"]], "Global COVID-19 cases", " ",
-                                    color_map={"Total cases": "lightgrey", "Active cases": "darkblue"})
+         figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases", "Deaths"]], "Global COVID-19 cases", " ",
+                                    color_map={"Total cases": "lightgrey", "Active cases": "darkblue", "Deaths": "orangered"})
     ),
     # TODO: Should this have a heading?
     html.Div([

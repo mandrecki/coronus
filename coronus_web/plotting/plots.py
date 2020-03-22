@@ -10,9 +10,8 @@ def plot_interactive_df(df, ylabel, legend_label, sort_by=None, color_map={}):
     elif sort_by == "max_value":
         order = df.max().sort_values(ascending=False).index.tolist()
         df_plot = df[order].reset_index()
-#     else:
-#         raise ValueError
-
+    else:
+        raise ValueError
 
     df_plot = df_plot.melt(id_vars=[df.index.name], value_name=ylabel, var_name=legend_label)
     fig = px.line(
