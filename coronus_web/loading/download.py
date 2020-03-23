@@ -6,7 +6,7 @@ import logging
 urls = dict(
     confirmed="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
     recovered="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv",
-    dead="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv",
+    deaths="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv",
 )
 
 GEO_LEVELS = [
@@ -16,6 +16,12 @@ GEO_LEVELS = [
     "Global",
 ]
 
+CASE_TYPES = [
+    "active",
+    "deaths",
+    "confirmed",
+    "recovered",
+]
 
 def get_continents():
     filename = "data/country_to_continent.csv"
@@ -62,7 +68,7 @@ def to_spacetime(df, geolevel: str):
 
 
 def calculate_active(spacetime_dict):
-    active = spacetime_dict["confirmed"] - spacetime_dict["recovered"] - spacetime_dict["dead"]
+    active = spacetime_dict["confirmed"] - spacetime_dict["recovered"] - spacetime_dict["deaths"]
     return active.replace(0, np.nan)
 
 

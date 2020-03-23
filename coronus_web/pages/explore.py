@@ -18,7 +18,7 @@ from app_def import dash_app
 from ..loading.frames import geography, df_aggregations, df_perc_changes, get_cases
 from ..analysis.preprocessing import cases_to_growths
 from ..plotting.plots import plot_interactive_df
-from ..loading.download import GEO_LEVELS
+from ..loading.download import GEO_LEVELS, CASE_TYPES
 
 digest_color_scheme = px.colors.diverging.RdYlGn_r[2:-2]
 
@@ -157,37 +157,51 @@ plots = [
     html.Div(
         [
             html.Div([
+                html.Span(["Case type:"], className='value-select-label'),
+                dcc.RadioItems(
+                    id="case_type_radio",
+                    options=[{"label": case_type.capitalize(), "value": case_type} for case_type in CASE_TYPES],
+                    value="active",
+                    persistence=True,
+                ),
+            ], className='value-select input-container'),
+            html.Div([
+                html.Span(["Breakdown by:"], className='value-select-label'),
+                dcc.RadioItems(
+                    id="breakdown_radio",
+                    options=[{"label": geo_level, "value": geo_level} for geo_level in GEO_LEVELS],
+                    value="Country",
+                    persistence=True,
+                ),
+            ], className='value-select input-container'),
+            html.Div([
                 html.Span(["Select regions:"], className='value-select-label'),
                 dcc.Dropdown(id="regions_dd", multi=True)
-            ], className='value-select input-container')
-        ] +
-        [
-            dcc.Checklist(
-                id="cases_checkbox",
-                className="input-container",
-                options=[
-                    {'label': 'Log scale y', 'value': "log_y"},
-                    {'label': 'Align growths', 'value': "align"},
-                ],
-                value=["align"],
-                persistence=True
-            ),
-            dcc.RadioItems(
-                id="breakdown_radio",
-                options=[{"label": geo_level, "value": geo_level} for geo_level in GEO_LEVELS],
-                value="Country",
-                persistence=True,
+            ], className='value-select input-container'),
 
-            ),
-            daq.NumericInput(
-                id="smoothing_growth",
-                className="input-container",
-                label="Smoothing",
-                labelPosition="top",
-                min=1,
-                max=10,
-                value=2,
-            )
+            html.Div([
+                html.Span(["Plotting options:"], className='value-select-label'),
+                dcc.Checklist(
+                    id="cases_checkbox",
+                    className="input-container",
+                    options=[
+                        {'label': 'Log scale y', 'value': "log_y"},
+                        {'label': 'Align growths', 'value': "align"},
+                    ],
+                    value=["align"],
+                    persistence=True
+                ),
+                daq.NumericInput(
+                    id="smoothing_growth",
+                    className="input-container",
+                    label="Smoothing",
+                    # labelPosition="top",
+                    min=1,
+                    max=10,
+                    value=2,
+                ),
+            ], className='value-select input-container'),
+
         ],
         id="div_dd"
     ),
@@ -225,24 +239,23 @@ def make_dropdown(geo_level):
 
 @dash_app.callback(
     [Output("cases_plot", "figure"), Output("growth_plot", "figure")],
-    [Input("regions_dd", "value")] \
-    + [Input("smoothing_growth", "value"), Input("cases_checkbox", "value")],
+    [Input("regions_dd", "value"), Input("smoothing_growth", "value"), Input("cases_checkbox", "value"), Input("case_type_radio", "value")],
     [State("breakdown_radio", "value")]
 )
-def make_plots(regions, smoothing, checkboxes, geo_level):
+def make_plots(regions, smoothing, checkboxes, case_type, geo_level):
     align_growths = True if "align" in checkboxes else False
     log_y = True if "log_y" in checkboxes else False
 
-    active_cases = get_cases(geo_level, "active")
+    cases = get_cases(geo_level, case_type)
     if regions:
-        active_cases = active_cases[regions]
+        cases = cases[regions]
     else:
         # hard limit to 10 regions
-        active_cases = active_cases.iloc[:, :10]
+        cases = cases.iloc[:, :10]
 
-    growths = cases_to_growths(active_cases, smoothing, align_max=align_growths, return_log=False)
+    growths = cases_to_growths(cases, smoothing, align_max=align_growths, return_log=False)
 
-    cases_fig = plot_interactive_df(active_cases[growths.columns], "Active cases", " ")
+    cases_fig = plot_interactive_df(cases[growths.columns], "{} cases".format(case_type), " ")
     growths_fig = plot_interactive_df(growths, "Daily growth", " ")
 
     cases_fig.update_layout(
