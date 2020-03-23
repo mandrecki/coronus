@@ -82,10 +82,10 @@ def make_map_figure():
         hover_data=["Cases", "Country"],
         animation_frame="Date",
         animation_group="State",
-        height=600,
+        height=750,
     )
     fig.update_layout(mapbox_style="carto-positron",
-                      mapbox_zoom=1, mapbox_center={"lat": 20.0, "lon": 20.0})
+                      mapbox_zoom=1.25, mapbox_center={"lat": 28.0, "lon": 15.0})
     fig.update_layout(margin={"r": 20, "t": 0, "l": 20, "b": 0})
 
     return fig
@@ -97,9 +97,6 @@ def plot(graph_id, title, description=None, figure=None):
     else:
         graph = dcc.Graph(id=graph_id, className='graph')
 
-
-
-
     children = [
         html.H3(title),
         dcc.Loading(graph, style={"height": 600})
@@ -109,17 +106,15 @@ def plot(graph_id, title, description=None, figure=None):
 
     return html.Div(className='graph-container', children=children)
 
+
 intro = [
-        table_digest(),
-        plot("welcome_plot", " ",
+    table_digest(),
+    plot("welcome_plot", " ",
          figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases", "Deaths"]], "Global COVID-19 cases", " ",
                                     color_map={"Total cases": "lightgrey", "Active cases": "darkblue", "Deaths": "orangered"})
     ),
-    # TODO: Should this have a heading?
     html.Div([
-        # html.H1("Why predict?"),
         html.H1("Why we predict?"),
-        # html.H1("Our mission?"),
         html.P([
             "We use machine learning methodology to forecast the future extent and impact of the ongoing pandemy. "
             "World's governments are now making crucial decisions that will affect nearly everybody on the planet. "
@@ -195,7 +190,6 @@ plots = [
                     id="smoothing_growth",
                     className="input-container",
                     label="Smoothing",
-                    # labelPosition="top",
                     min=1,
                     max=10,
                     value=2,
@@ -254,10 +248,10 @@ def make_plots(regions, smoothing, checkboxes, case_type, geo_level):
         cases = cases.iloc[:, :10]
 
     growths = cases_to_growths(cases, smoothing, align_max=align_growths, return_log=False)
-    cases_fig = plot_interactive_df(cases, "{} cases".format(case_type), " ")
+    cases_fig = plot_interactive_df(cases, "{} cases".format(case_type.capitalize()), " ")
 
     if len(growths) > 0:
-        growths_fig = plot_interactive_df(growths, "Daily growth", " ")
+        growths_fig = plot_interactive_df(growths, "Daily {} case growth".format(case_type), " ")
 
         cases_fig.update_layout(
             yaxis_type="log" if log_y else None,
