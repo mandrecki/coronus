@@ -65,19 +65,21 @@ def make_map_figure():
     # https://plot.ly/python/v3/animations/
     active = get_cases("State", "active")
 
-    df_plot = np.log10(active).fillna(0)
-    df_plot = df_plot.unstack().reset_index()
+    df_plot = active.unstack()
+    df_plot = pd.concat([
+        df_plot.rename("Cases"),
+        np.log(df_plot).rename("Log(Cases)")
+    ], axis=1).fillna(0).reset_index()
     df_plot.Date = df_plot.Date.map(lambda x: str(x.date()))
-    df_plot = df_plot.merge(geography[["State", "Lat", "Long", "Continent"]], on="State")
-    df_plot = df_plot.rename(columns={0: "Log10(Cases)"})
+    df_plot = df_plot.merge(geography[["State", "Lat", "Long", "Continent", "Country"]], on="State")
 
     fig = px.scatter_mapbox(
         data_frame=df_plot,
         lat="Lat", lon="Long",
-        size="Log10(Cases)",
+        size="Log(Cases)",
         color="Continent",
         hover_name="State",
-        hover_data=["Log10(Cases)"],
+        hover_data=["Cases", "Country"],
         animation_frame="Date",
         animation_group="State",
         height=600,
