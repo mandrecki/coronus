@@ -93,9 +93,9 @@ def make_map_figure():
 
 def plot(graph_id, title, description=None, figure=None):
     if figure is not None:
-        graph = dcc.Graph(id=graph_id, className='graph', figure=figure)
+        graph = dcc.Graph(id=graph_id, className='graph', config={"staticPlot": True}, figure=figure)
     else:
-        graph = dcc.Graph(id=graph_id, className='graph')
+        graph = dcc.Graph(id=graph_id, className='graph', config={"staticPlot": True})
 
 
 
