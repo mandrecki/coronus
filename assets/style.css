@@ -189,6 +189,9 @@ h1, h2, h3, h4, h5, h6, p, div, span {
     justify-content: left;
 }
 
+.modebar {
+display: none !important;
+}
 /*
  * You predict
  */
