@@ -87,7 +87,7 @@ h1, h2, h3, h4, h5, h6, p, div, span {
 
 #footer a {
     color: #888;
-    text-decoration: none;
+    border-bottom: 1px solid #555;
 }
 
 /*
