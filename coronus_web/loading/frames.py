@@ -13,7 +13,7 @@ def get_cases(geolevel: str, cases_type: str):
 default_geolevel = "Country"
 df_reco = get_cases(default_geolevel, "recovered")
 df_conf = get_cases(default_geolevel, "confirmed")
-df_dead = get_cases(default_geolevel, "dead")
+df_dead = get_cases(default_geolevel, "deaths")
 df_active = get_cases(default_geolevel, "active")
 
 df_aggregations = pd.concat([
