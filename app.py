@@ -27,8 +27,12 @@ header = html.Header(className='main-header', children=[
 ])
 
 footer = html.Div(id='footer', children=[
-    # '♥♥♥deep-nearest-neighbours squooooood♥♥♥'
-    html.A("team@predictvirus.com", href="mailto:team@predictvirus.com", target="_blank")
+    html.P([
+        html.A("team@predictvirus.com", href="mailto:team@predictvirus.com", target="_blank"),
+        " based on Johns Hopkins University ",
+        html.A("open dataset", href="https://github.com/CSSEGISandData/COVID-19", target="_blank")
+    ])
+
 ])
 
 dash_app.layout = html.Div([
