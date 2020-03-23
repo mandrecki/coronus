@@ -30,7 +30,7 @@ def append_continents(cases, continents):
         how="left")
     # Avoid failure if new countries were added that we are not handling yet
     cases_with_continents = cases_with_continents.fillna("Unassigned")
-    if (cases_with_continents == "Unassigned").any(axis=None):
+    if "Unassigned" in cases_with_continents.Continent:
         logging.warning("Country without a continent! Add row to data/country_to_continent.csv \n"
                         "{}".format(cases_with_continents[cases_with_continents.Continent == "Unassigned"].Country))
 
