@@ -27,6 +27,10 @@ def plot_interactive_df(df, ylabel, legend_label, sort_by=None, color_map={}):
         margin={'t': 32},
         yaxis={
             "side": "right",
+            'fixedrange': True
+        },
+        xaxis={
+            'fixedrange': True
         },
         legend={
             "x": 0,
