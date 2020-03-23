@@ -254,18 +254,24 @@ def make_plots(regions, smoothing, checkboxes, case_type, geo_level):
         cases = cases.iloc[:, :10]
 
     growths = cases_to_growths(cases, smoothing, align_max=align_growths, return_log=False)
+    cases_fig = plot_interactive_df(cases, "{} cases".format(case_type), " ")
 
-    cases_fig = plot_interactive_df(cases[growths.columns], "{} cases".format(case_type), " ")
-    growths_fig = plot_interactive_df(growths, "Daily growth", " ")
+    print(growths)
+    print(len(growths))
+    if len(growths) > 0:
+        growths_fig = plot_interactive_df(growths, "Daily growth", " ")
 
-    cases_fig.update_layout(
-        yaxis_type="log" if log_y else None,
-        legend={"bgcolor": "rgba(0,0,0,0)"},
-    )
-    growths_fig.update_layout(
-        yaxis={"tickformat": '.1{}'.format("%")},
-        legend={"bgcolor": "rgba(0,0,0,0)"}
-    )
+        cases_fig.update_layout(
+            yaxis_type="log" if log_y else None,
+            legend={"bgcolor": "rgba(0,0,0,0)"},
+        )
+        growths_fig.update_layout(
+            yaxis={"tickformat": '.1{}'.format("%")},
+            legend={"bgcolor": "rgba(0,0,0,0)"}
+        )
+
+    else:
+        growths_fig = {}
 
     return cases_fig, growths_fig
 
