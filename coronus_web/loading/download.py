@@ -1,6 +1,7 @@
 
 import numpy as np
 import pandas as pd
+import logging
 
 urls = dict(
     confirmed="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
@@ -27,6 +28,11 @@ def append_continents(cases, continents):
         continents,
         on="Country",
         how="left")
+    # Avoid failure if new countries were added that we are not handling yet
+    cases_with_continents = cases_with_continents.fillna("Unassigned")
+    if (cases_with_continents == "Unassigned").any(axis=None):
+        logging.warning("Country without a continent! Add row to data/country_to_continent.csv \n"
+                        "{}".format(cases_with_continents[cases_with_continents.Continent == "Unassigned"].Country))
 
     return cases_with_continents
 
