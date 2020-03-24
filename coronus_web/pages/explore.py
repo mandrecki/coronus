@@ -52,7 +52,7 @@ def digest_for(aggregation):
 def table_digest():
     latest_date = df_aggregations.index[-1]
     return html.Div([
-        html.H1([
+        html.H2([
             "Latest stats ",
             html.Span("({})".format(latest_date.strftime('%d %b %Y')))
         ]),
@@ -106,7 +106,7 @@ def plot(graph_id, title, description=None, figure=None):
         graph = dcc.Graph(id=graph_id, className='graph')
 
     children = [
-        html.H3(title),
+        html.H2(title),
         dcc.Loading(graph, style={"height": 600})
     ]
     if description is not None:
@@ -122,7 +122,7 @@ intro = [
                                     color_map={"Total cases": "lightgrey", "Active cases": "darkblue", "Deaths": "orangered"})
     ),
     html.Div([
-        html.H1("Why we predict?"),
+        html.H2("Why we predict?"),
         html.P([
             "We use machine learning methodology to forecast the future extent and impact of the ongoing pandemy. "
             "World's governments are now making crucial decisions that will affect nearly everybody on the planet. "
