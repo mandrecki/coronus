@@ -20,7 +20,7 @@ header = html.Header(className='main-header', children=[
         html.P("Explore the spread of COVID-19 and predict its impact", className='strapline')
     ]),
     html.Div(className='menu', children=[
-        dcc.Link('Explore', className='explore-link', href='/'),
+        dcc.Link('Explore', className='explore-link', href='/explore'),
         dcc.Link('We predict', className='predict-link', href='/we-predict'),
         dcc.Link('You predict', className='predict-link', href='/you-predict'),
     ])
@@ -40,7 +40,7 @@ dash_app.layout = html.Div([
     header,
     html.Div(id='page-content'),
     footer
-])
+], id='container')
 
 
 layout = html.Div([
@@ -52,7 +52,7 @@ layout = html.Div([
     Output('page-content', 'children'),
     [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/':
+    if pathname == '/' or pathname == '/explore':
         return explore.layout
     elif pathname == '/we-predict':
         return we_predict.layout
@@ -61,6 +61,14 @@ def display_page(pathname):
     else:
         return '404'
 
+
+@dash_app.callback(
+    Output('container', 'className'),
+    [Input('url', 'pathname')])
+def set_page_content_class(pathname):
+    if pathname == '/':
+        return 'home'
+    return ''
 
 if __name__ == '__main__':
     dash_app.run_server(debug=True)

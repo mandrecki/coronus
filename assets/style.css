@@ -27,22 +27,13 @@ p {
  * Page scaffolding
  */
 
-.main-header {/*
-    display: grid;
-    grid-template-columns: repeat(12, 1fr); */
-    background: url('/assets/hero-2300.gif');
-    background-size: 100%;
-    background-position: bottom;
-    font-size: 3em;
+.main-header {
+    background: url('/assets/header-tile-500.gif');
     font-family: "Raleway";
+    font-size: 1.5em;
     text-align: center;
-    padding-top: 4.5em;
-    padding-bottom: 6em;
+    padding: 2em 2em;
     margin-bottom: 3rem;
-}
-
-.main-header .header-content {
-    margin: 0 auto 0.3em auto;
 }
 
 .main-header h1, .main-header p {
@@ -55,9 +46,7 @@ p {
 }
 
 .main-header p.strapline {
-    font-size: 0.5em;
-    text-align: center;
-    color: #d0d0d0;
+    display: none;
 }
 
 .main-header .menu {
@@ -214,14 +203,38 @@ display: none !important;
 }
 
 
-@media (max-width: 1600px) {
-    .main-header {
+@media (min-width: 780px) {
+    .home .main-header {/*
+        display: grid;
+        grid-template-columns: repeat(12, 1fr); */
+        background: url('/assets/hero-2300.gif');
+        background-size: 100%;
+        background-position: bottom;
+        font-size: 3em;
+        padding-top: 4.5em;
+        padding-bottom: 6em;
+    }
+
+    .home .main-header .header-content {
+        margin: 0 auto 0.3em auto;
+    }
+
+    .home .main-header p.strapline {
+        display: block;
+        font-size: 0.75em;
+        text-align: center;
+        color: #d0d0d0;
+    }
+}
+
+@media (min-width: 780px and width: 1600px) {
+    .home .main-header {
         background-image: url('/assets/hero-1600.gif');
     }
 }
 
 @media (max-width: 1300px) {
-    .main-header  {
+    .home .main-header  {
         font-size: 2em;
     }
 
@@ -231,11 +244,11 @@ display: none !important;
 }
 
 @media (max-width: 780px) {
-    .main-header {
+    .home .main-header {
         font-size: 1em;
     }
 
-    .main-header p.strapline, .main-header .menu a {
+    .home .main-header p.strapline, .home .main-header .menu a {
         font-size: 1em;
     }
 
@@ -245,11 +258,5 @@ display: none !important;
 
     #page-content .stats-digest {
         font-size: 0.8em;
-    }
-}
-
-@media (max-width: 400px) {
-    .main-header {
-        background-image: url('/assets/hero-400.gif');
     }
 }
