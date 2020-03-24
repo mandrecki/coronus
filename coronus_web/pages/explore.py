@@ -17,7 +17,7 @@ from app_def import dash_app
 
 from ..loading.frames import geography, df_aggregations, df_perc_changes, get_cases
 from ..analysis.preprocessing import cases_to_growths
-from ..plotting.plots import plot_interactive_df
+from ..plotting.plots import plot_interactive_df, human_format
 from ..loading.download import GEO_LEVELS, CASE_TYPES
 
 digest_color_scheme = px.colors.diverging.RdYlGn_r[2:-2]
@@ -68,7 +68,7 @@ def make_map_figure():
     df_plot = active.unstack()
     df_plot = pd.concat([
         df_plot.rename("Cases"),
-        np.log(df_plot).rename("Log(Cases)")
+        np.log10(df_plot).rename("Log10(Cases)")
     ], axis=1).fillna(0).reset_index()
     df_plot.Date = df_plot.Date.map(lambda x: str(x.date()))
     df_plot = df_plot.merge(geography[["State", "Lat", "Long", "Continent", "Country"]], on="State")
@@ -76,14 +76,22 @@ def make_map_figure():
     fig = px.scatter_mapbox(
         data_frame=df_plot,
         lat="Lat", lon="Long",
-        size="Log(Cases)",
-        color="Continent",
+        size="Log10(Cases)",
+        # color="Continent",
+        color="Log10(Cases)",
         hover_name="State",
         hover_data=["Cases", "Country"],
         animation_frame="Date",
         animation_group="State",
+        color_continuous_scale="sunset",
         height=750,
     )
+    ticks = np.arange(0, 10)
+    fig.update_layout(coloraxis_colorbar=dict(
+        title="Cases",
+        tickvals=ticks,
+        ticktext=list(map(human_format,  10**ticks))
+    ))
     fig.update_layout(mapbox_style="carto-positron",
                       mapbox_zoom=1.25, mapbox_center={"lat": 28.0, "lon": 15.0})
     fig.update_layout(margin={"r": 20, "t": 0, "l": 20, "b": 0})
