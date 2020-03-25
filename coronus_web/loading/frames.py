@@ -4,8 +4,8 @@ import pandas as pd
 from .download import get_new_frames, get_frames
 
 
-# cases_by_geolevel, geography = get_new_frames()
-cases_by_geolevel, geography = get_frames()
+cases_by_geolevel, geography = get_new_frames()
+# cases_by_geolevel, geography = get_frames()
 
 
 def get_cases(geolevel: str, cases_type: str):

@@ -24,6 +24,7 @@ CASE_TYPES = [
     "confirmed",
     "recovered",
     "tested",
+    "active_derived",
 ]
 
 def get_continents():
@@ -119,6 +120,10 @@ def get_geo_codes():
 
 def get_new_frames():
     cases = pd.read_csv("https://coronadatascraper.com/timeseries.csv", parse_dates=["date"])
+
+    # FIXME very naive approach without testing!!!
+    cases = cases.drop_duplicates(["country", "date"])
+
     cases = cases.rename(columns={
         "country": "country_code",
         "cases": "confirmed",
@@ -134,7 +139,7 @@ def get_new_frames():
     )
 
     geography = cases[GEO_LEVELS + ["country_code", "lat", "long", "population"]].drop_duplicates(GEO_LEVELS)
-    cases["active"] = (cases["confirmed"] - cases["recovered"] - cases["deaths"]).clip(lower=0)
+    cases["active_derived"] = (cases["confirmed"] - cases["recovered"] - cases["deaths"])
 
     cases_by_geolevel = {
         geo_level:

@@ -119,8 +119,8 @@ def plot(graph_id, title, description=None, figure=None):
 intro = [
     table_digest(),
     plot("welcome_plot", " ",
-         figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases", "Deaths"]], "Global COVID-19 cases", " ",
-                                    color_map={"Total cases": "lightgrey", "Active cases": "darkblue", "Deaths": "orangered"})
+         figure=plot_interactive_df(df_aggregations[["Active cases", "Total cases", "Deaths", "Recoveries"]], "Global COVID-19 cases", " ",
+                                    color_map={"Total cases": "lightgrey", "Active cases": "darkblue", "Deaths": "orangered", "Recoveries": "green"})
     ),
     html.Div([
         html.H2("Why we predict?"),
