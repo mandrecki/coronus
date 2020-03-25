@@ -10,8 +10,8 @@ urls = dict(
 )
 
 GEO_LEVELS = [
-    "city",
-    "county",
+    # "city",
+    # "county",
     "state",
     "country",
     "continent",
@@ -36,13 +36,13 @@ def get_continents():
 def append_continents(cases, continents):
     cases_with_continents = cases.merge(
         continents,
-        on="Country",
+        on="country",
         how="left")
     # Avoid failure if new countries were added that we are not handling yet
     cases_with_continents = cases_with_continents.fillna("Unassigned")
-    if "Unassigned" in cases_with_continents.Continent:
+    if "Unassigned" in cases_with_continents.continent:
         logging.warning("Country without a continent! Add row to data/country_to_continent.csv \n"
-                        "{}".format(cases_with_continents[cases_with_continents.Continent == "Unassigned"].Country))
+                        "{}".format(cases_with_continents[cases_with_continents.Continent == "Unassigned"].country))
 
     return cases_with_continents
 
@@ -52,21 +52,23 @@ def get_raw_df(url):
     #     df = pd.read_csv(io.StringIO(s.decode('utf-8')))
     df = pd.read_csv(url)
     df = df.rename(columns={
-        "Province/State": "State",
-        "Country/Region": "Country",
+        "Province/State": "state",
+        "Country/Region": "country",
+        "Lat": "lat",
+        "Long": "long",
     })
-    df["Global"] = "Global"
-    df.loc[df["State"].isna(), "State"] = df.loc[df["State"].isna(), "Country"]
+    df["global"] = "global"
+    df.loc[df["state"].isna(), "state"] = df.loc[df["state"].isna(), "country"]
     return df
 
 
 def to_spacetime(df, geolevel: str):
-    drop_cols = GEO_LEVELS + ["Lat", "Long"]
+    drop_cols = GEO_LEVELS + ["lat", "long"]
     drop_cols.remove(geolevel)
     df = df.drop(columns=drop_cols)
     df = df.groupby(geolevel).sum()
     df = df.T
-    df.index.name = "Date"
+    df.index.name = "date"
     df.index = pd.to_datetime(df.index)
     return df
 
@@ -85,7 +87,7 @@ def get_frames():
         for case_type, url in urls.items()
     }
 
-    geography = cases_raw["confirmed"][GEO_LEVELS + ["Lat", "Long"]]
+    geography = cases_raw["confirmed"][GEO_LEVELS + ["lat", "long"]]
     cases_by_geolevel = dict()
     for geolevel in GEO_LEVELS:
         spacetime = {count_type: to_spacetime(cases_raw[count_type], geolevel=geolevel) for count_type in cases_raw.keys()}
