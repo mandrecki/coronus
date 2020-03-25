@@ -10,10 +10,12 @@ urls = dict(
 )
 
 GEO_LEVELS = [
-    "State",
-    "Country",
-    "Continent",
-    "Global",
+    "city",
+    "county",
+    "state",
+    "country",
+    "continent",
+    "global",
 ]
 
 CASE_TYPES = [
@@ -21,7 +23,9 @@ CASE_TYPES = [
     "deaths",
     "confirmed",
     "recovered",
+    "tested",
 ]
+
 
 def get_continents():
     filename = "data/country_to_continent.csv"
@@ -89,3 +93,58 @@ def get_frames():
         cases_by_geolevel[geolevel] = spacetime
 
     return cases_by_geolevel, geography
+
+
+######### NEW DATA #############
+
+def get_geo_codes():
+    codes = pd.read_csv("/home/ira/code/projects/coronus/data/JohnSnowLabs/country-and-continent-codes-list-csv_csv.csv")
+    codes = codes.set_index("Three_Letter_Country_Code")
+
+    simple_country_names = pd.read_csv("data/tadast/countries_codes_and_coordinates.csv")
+    simple_country_names["Alpha-3 code"] = simple_country_names["Alpha-3 code"].map(lambda x: x[2:-1])
+    simple_country_names = simple_country_names.set_index("Alpha-3 code")
+
+    codes = codes.merge(simple_country_names[["Country"]], left_index=True, right_index=True,
+                                        how="inner")
+    codes = codes.rename(columns={
+        "Continent_Name": "continent",
+        "Country": "country",
+    })
+    codes = codes.drop(columns=[col for col in codes.columns if col not in GEO_LEVELS])
+
+    return codes
+
+
+def get_new_frames():
+    cases = pd.read_csv("https://coronadatascraper.com/timeseries.csv", parse_dates=["date"])
+    cases = cases.rename(columns={
+        "country": "country_code",
+        "cases": "confirmed",
+    })
+    cases["global"] = "global"
+
+    codes = get_geo_codes()
+    cases = cases.merge(
+        codes,
+        left_on="country_code",
+        right_index=True,
+        how="left"
+    )
+
+    geography = cases[GEO_LEVELS + ["country_code", "lat", "long", "population"]].drop_duplicates(GEO_LEVELS)
+    cases["active"] = (cases["confirmed"] - cases["recovered"] - cases["deaths"]).clip(lower=0)
+
+    cases_by_geolevel = {
+        geo_level:
+            {
+                case_type: cases[["date", geo_level, case_type]]
+                    .groupby(["date", geo_level])[case_type].sum().unstack().replace(0, np.nan).dropna(axis=1, how='all')
+                for case_type in CASE_TYPES}
+        for geo_level in GEO_LEVELS
+    }
+
+    return cases_by_geolevel, geography
+
+
+

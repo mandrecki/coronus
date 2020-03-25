@@ -1,16 +1,16 @@
 import pandas as pd
 
-from .download import get_frames
+from .download import get_new_frames
 
 
-cases_by_geolevel_type, geography = get_frames()
+cases_by_geolevel, geography = get_new_frames()
 
 
 def get_cases(geolevel: str, cases_type: str):
-    return cases_by_geolevel_type[geolevel][cases_type]
+    return cases_by_geolevel[geolevel][cases_type]
 
 
-default_geolevel = "Country"
+default_geolevel = "country"
 df_reco = get_cases(default_geolevel, "recovered")
 df_conf = get_cases(default_geolevel, "confirmed")
 df_dead = get_cases(default_geolevel, "deaths")
