@@ -24,7 +24,7 @@ digest_color_scheme = px.colors.diverging.RdYlGn_r[2:-2]
 
 
 def get_quantiles(df, col):
-    return pd.qcut(df[col], len(digest_color_scheme), labels=range(len(digest_color_scheme)))
+    return pd.qcut(df[col]+0.0001*np.random.randn(len(df[col])), len(digest_color_scheme), labels=range(len(digest_color_scheme)))
 
 
 df_aggregations_quantiles = {col: get_quantiles(df_aggregations, col) for col in df_aggregations}
@@ -63,26 +63,27 @@ def table_digest():
 
 def make_map_figure():
     # https://plot.ly/python/v3/animations/
-    active = get_cases("State", "active")
+    active = get_cases("state", "active")
 
     df_plot = active.unstack()
     df_plot = pd.concat([
-        df_plot.rename("Cases"),
-        np.log10(df_plot).rename("Log10(Cases)")
+        df_plot.rename("cases"),
+        np.log10(df_plot).rename("log10(cases)")
     ], axis=1).fillna(0).reset_index()
-    df_plot.Date = df_plot.Date.map(lambda x: str(x.date()))
-    df_plot = df_plot.merge(geography[["State", "Lat", "Long", "Continent", "Country"]], on="State")
+    df_plot.date = df_plot.date.map(lambda x: str(x.date()))
+    df_plot = df_plot.merge(geography[["state", "lat", "long", "continent", "country"]], on="state", how="inner")
 
     fig = px.scatter_mapbox(
         data_frame=df_plot,
-        lat="Lat", lon="Long",
-        size="Log10(Cases)",
-        # color="Continent",
-        color="Log10(Cases)",
-        hover_name="State",
-        hover_data=["Cases", "Country"],
-        animation_frame="Date",
-        animation_group="State",
+        lat="lat", lon="long",
+        # size="cases",
+        size="log10(cases)",
+        # color="continent",
+        color="log10(cases)",
+        hover_name="country",
+        hover_data=["cases", "country"],
+        animation_frame="date",
+        animation_group="state",
         color_continuous_scale="sunset",
         height=750,
     )
@@ -173,7 +174,7 @@ plots = [
                 dcc.RadioItems(
                     id="breakdown_radio",
                     options=[{"label": geo_level, "value": geo_level} for geo_level in GEO_LEVELS],
-                    value="Country",
+                    value="country",
                     persistence=True,
                 ),
             ], className='value-select input-container'),
@@ -241,8 +242,7 @@ def make_dropdown(geo_level):
 
 @dash_app.callback(
     [Output("cases_plot", "figure"), Output("growth_plot", "figure")],
-    [Input("regions_dd", "value"), Input("smoothing_growth", "value"), Input("cases_checkbox", "value"), Input("case_type_radio", "value")],
-    [State("breakdown_radio", "value")]
+    [Input("regions_dd", "value"), Input("smoothing_growth", "value"), Input("cases_checkbox", "value"), Input("case_type_radio", "value"), Input("breakdown_radio", "value")],
 )
 def make_plots(regions, smoothing, checkboxes, case_type, geo_level):
     align_growths = True if "align" in checkboxes else False

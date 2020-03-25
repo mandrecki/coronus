@@ -10,5 +10,6 @@ dash_app = dash.Dash(__name__, external_stylesheets=external_stylesheets, extern
       'name': 'viewport',
       'content': 'width=device-width, initial-scale=1.0'
     }])
+
 dash_app.config.suppress_callback_exceptions = True
 
