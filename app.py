@@ -17,12 +17,12 @@ dash_app.title = 'Predict the virus'
 header = html.Header(className='main-header', children=[
     html.Div(className='header-content', children=[
         html.H1(["Predict the virus"]),
-        html.P("Explore the spread of COVID-19 and predict its impact", className='strapline')
-    ]),
-    html.Div(className='menu', children=[
-        dcc.Link('Explore', className='explore-link', href='/explore'),
-        dcc.Link('We predict', className='predict-link', href='/we-predict'),
-        dcc.Link('You predict', className='predict-link', href='/you-predict'),
+        html.P("Explore the spread of COVID-19 and predict its impact", className='strapline'),
+        html.Div(className='menu', children=[
+            dcc.Link('Explore', className='explore-link', href='/explore'),
+            dcc.Link('We predict', className='predict-link', href='/we-predict'),
+            dcc.Link('You predict', className='predict-link', href='/you-predict'),
+        ])
     ])
 ])
 
