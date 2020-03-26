@@ -100,7 +100,7 @@ def get_frames():
 ######### NEW DATA #############
 
 def get_geo_codes():
-    codes = pd.read_csv("/home/ira/code/projects/coronus/data/JohnSnowLabs/country-and-continent-codes-list-csv_csv.csv")
+    codes = pd.read_csv("data/JohnSnowLabs/country-and-continent-codes-list-csv_csv.csv")
     codes = codes.set_index("Three_Letter_Country_Code")
 
     simple_country_names = pd.read_csv("data/tadast/countries_codes_and_coordinates.csv")
