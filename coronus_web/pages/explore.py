@@ -235,9 +235,7 @@ layout = intro + plots
     [Input("breakdown_radio", "value")]
 )
 def make_dropdown(geo_level):
-    df_active = get_cases(geo_level, "active")
-    df_conf = get_cases(geo_level, "confirmed")
-    dd_options = [dict(label=x, value=x) for x in df_active.columns if df_conf[x].max() > 20]
+    dd_options = [dict(label=x, value=x) for x in sorted(geography[geo_level].dropna().unique())]
     return [dd_options, geo_level]
 
 @dash_app.callback(
