@@ -1,3 +1,5 @@
+import os
+
 from setuptools import setup, find_packages
 
 with open("requirements.txt") as f:
@@ -6,6 +8,10 @@ install_requires = [t.strip() for t in tests_require]
 
 with open("README.md") as f:
     long_description = f.read()
+
+data_files = []
+for (root, _, files) in os.walk('data'):
+    data_files.append((root, [os.path.join(root, f) for f in files]))
 
 setup(
     name="coronus_web",
@@ -18,7 +24,7 @@ setup(
     author_email="marian.andrecki@gmail.com",
     license="",
     packages=find_packages(exclude=['doc', 'tests*']),
-    package_data={"": ["requirements.txt"]},
+    package_data={"": ["requirements.txt"], "coronus_web": ['data/*']},
     python_requires=">=3.6",
     install_requires=install_requires,
     zip_safe=False,

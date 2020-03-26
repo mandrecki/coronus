@@ -3,6 +3,10 @@ import numpy as np
 import pandas as pd
 import logging
 
+from pkg_resources import resource_listdir, resource_stream
+
+import coronus_web
+
 urls = dict(
     confirmed="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
     recovered="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv",
@@ -28,8 +32,8 @@ CASE_TYPES = [
 ]
 
 def get_continents():
-    filename = "data/country_to_continent.csv"
-    df = pd.read_csv(filename, encoding = "iso-8859-1")
+    stream = resource_stream(coronus_web.__name__, "data/country_to_continent.csv")
+    df = pd.read_csv(stream, encoding = "iso-8859-1")
     return df
 
 
@@ -100,10 +104,10 @@ def get_frames():
 ######### NEW DATA #############
 
 def get_geo_codes():
-    codes = pd.read_csv("data/JohnSnowLabs/country-and-continent-codes-list-csv_csv.csv")
+    codes = pd.read_csv(resource_stream(coronus_web.__name__, "data/JohnSnowLabs/country-and-continent-codes-list-csv_csv.csv"))
     codes = codes.set_index("Three_Letter_Country_Code")
 
-    simple_country_names = pd.read_csv("data/tadast/countries_codes_and_coordinates.csv")
+    simple_country_names = pd.read_csv(resource_stream(coronus_web.__name__, "data/tadast/countries_codes_and_coordinates.csv"))
     simple_country_names["Alpha-3 code"] = simple_country_names["Alpha-3 code"].map(lambda x: x[2:-1])
     simple_country_names = simple_country_names.set_index("Alpha-3 code")
 
