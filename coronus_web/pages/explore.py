@@ -32,11 +32,20 @@ df_perc_changes_quantiles = {col: get_quantiles(df_perc_changes, col) for col in
 
 
 def digest_for(aggregation):
-    today = df_aggregations[aggregation][-1]
-    today_clr = digest_color_scheme[df_aggregations_quantiles[aggregation][-1]] if aggregation != 'Total cases' else None
-    yesterday = df_aggregations[aggregation][-2]
-    perc_change = df_perc_changes[aggregation][-1] * 100 - 100
-    perc_change_clr = digest_color_scheme[df_perc_changes_quantiles[aggregation][-1]]
+
+    if aggregation != "Active cases":
+        today = df_aggregations[aggregation][-1]
+        today_clr = digest_color_scheme[df_aggregations_quantiles[aggregation][-1]] if aggregation != 'Total cases' else None
+        yesterday = df_aggregations[aggregation][-2]
+        perc_change = df_perc_changes[aggregation][-1] * 100 - 100
+        perc_change_clr = digest_color_scheme[df_perc_changes_quantiles[aggregation][-1]]
+    else:
+        today_clr = "rgba(100,100,100,100)"
+        perc_change_clr = "rgba(100,100,100,100)"
+        today = 0
+        yesterday = 0
+        perc_change = np.nan
+
     return html.P([
         f"{aggregation}: ",
         html.Span(f"{today:,.0f}", className='today', style={'color': today_clr}),
@@ -63,7 +72,7 @@ def table_digest():
 
 def make_map_figure():
     # https://plot.ly/python/v3/animations/
-    active = get_cases("state", "active")
+    active = get_cases("country", "active")
 
     df_plot = active.unstack()
     df_plot = pd.concat([
@@ -71,7 +80,7 @@ def make_map_figure():
         np.log10(df_plot).rename("log10(cases)")
     ], axis=1).fillna(0).reset_index()
     df_plot.date = df_plot.date.map(lambda x: str(x.date()))
-    df_plot = df_plot.merge(geography[["state", "lat", "long", "continent", "country"]], on="state", how="inner")
+    df_plot = df_plot.merge(geography[["state", "lat", "long", "continent", "country"]], on="country", how="inner")
 
     fig = px.scatter_mapbox(
         data_frame=df_plot,
@@ -83,7 +92,7 @@ def make_map_figure():
         hover_name="country",
         hover_data=["cases", "country"],
         animation_frame="date",
-        animation_group="state",
+        animation_group="country",
         color_continuous_scale="sunset",
         height=750,
     )

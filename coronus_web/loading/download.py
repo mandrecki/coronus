@@ -45,7 +45,7 @@ def get_geo_codes():
     return codes
 
 
-def get_new_frames() -> (pd.DataFrame, pd.DataFrame):
+def get_frames() -> (pd.DataFrame, pd.DataFrame):
     """
     Generates DataFrames for different cases and geo_levels, as well as geography Dataframe with region naming conventions
     population and location.
@@ -80,7 +80,9 @@ def get_new_frames() -> (pd.DataFrame, pd.DataFrame):
         geo_level:
             {
                 case_type: cases[["date", geo_level, case_type]]
-                    .groupby(["date", geo_level])[case_type].sum().unstack().replace(0, np.nan).dropna(axis=1, how='all').fillna(method="ffill")  # FIXME added filling values by copying from past!!
+                    # .groupby(["date", geo_level])[case_type].sum().unstack().replace(0, np.nan).dropna(axis=1, how='all').fillna(method="ffill")  # FIXME added filling values by copying from past!!
+                    .groupby(["date", geo_level])[case_type].sum().unstack()
+                    .replace(0, np.nan).dropna(axis=1, how='all')  # FIXME added filling values by copying from past!!
                 for case_type in CASE_TYPES}
         for geo_level in GEO_LEVELS
     }

@@ -10,7 +10,7 @@ from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
 def generate_gp_samples(df_aggregations):
     dates = pd.date_range(df_aggregations.index.min(), "2020-05-01", name="Date")
 
-    data = np.log(df_aggregations.reset_index()["Active cases"]).dropna()
+    data = np.log(df_aggregations.reset_index()["Active cases"]).replace([-np.inf, np.inf], np.nan).dropna()
     X = np.atleast_2d(data.index).T
     y = np.atleast_2d(data.values).T - data.mean()
 
