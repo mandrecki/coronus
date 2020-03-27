@@ -83,6 +83,10 @@ p {
 #footer {
     background: #333;
     padding: 1em 0 3em 0;
+    text-align: center;
+}
+
+#footer p {
     color: #888;
     text-align: center;
 }
