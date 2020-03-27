@@ -53,6 +53,9 @@ def get_new_frames() -> (pd.DataFrame, pd.DataFrame):
 
     cases = pd.read_csv("https://coronadatascraper.com/timeseries.csv", parse_dates=["date"])
 
+    old_dataset = cases["url"] == "https://github.com/CSSEGISandData/COVID-19"
+    cases = cases[old_dataset].copy()
+
     # FIXME very naive approach without testing!!!
     # cases = cases.drop_duplicates(["country", "date"])
 
