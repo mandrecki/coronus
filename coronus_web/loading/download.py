@@ -82,7 +82,7 @@ def get_frames() -> (pd.DataFrame, pd.DataFrame):
                 case_type: cases[["date", geo_level, case_type]]
                     # .groupby(["date", geo_level])[case_type].sum().unstack().replace(0, np.nan).dropna(axis=1, how='all').fillna(method="ffill")  # FIXME added filling values by copying from past!!
                     .groupby(["date", geo_level])[case_type].sum().unstack()
-                    .replace(0, np.nan).dropna(axis=1, how='all')  # FIXME added filling values by copying from past!!
+                    .replace(0, np.nan).dropna(how='all')
                 for case_type in CASE_TYPES}
         for geo_level in GEO_LEVELS
     }

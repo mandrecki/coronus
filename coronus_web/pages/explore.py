@@ -240,16 +240,26 @@ plots = [
 layout = intro + plots
 
 @dash_app.callback(
-    [Output("regions_dd", "options"), Output("regions_dd", "persistence")],
+    [Output("regions_dd", "options"), Output("regions_dd", "persistence"),  Output("regions_dd", "value")],
     [Input("breakdown_radio", "value")]
 )
 def make_dropdown(geo_level):
     dd_options = [dict(label=x, value=x) for x in sorted(geography[geo_level].dropna().unique())]
-    return [dd_options, geo_level]
+    DEFAULT_REGIONS = {
+        "state": ["Hubei"],
+        "country": ["Poland"],
+        "continent": ["Europe"],
+        "global": ["global"],
+    }
+    regions = DEFAULT_REGIONS[geo_level]
+
+
+    return [dd_options, geo_level, regions]
 
 @dash_app.callback(
     [Output("cases_plot", "figure"), Output("growth_plot", "figure")],
-    [Input("regions_dd", "value"), Input("smoothing_growth", "value"), Input("cases_checkbox", "value"), Input("case_type_radio", "value"), Input("breakdown_radio", "value")],
+    [Input("regions_dd", "value"), Input("smoothing_growth", "value"), Input("cases_checkbox", "value"), Input("case_type_radio", "value")],
+    [State("breakdown_radio", "value")]
 )
 def make_plots(regions, smoothing, checkboxes, case_type, geo_level):
     align_growths = True if "align" in checkboxes else False
