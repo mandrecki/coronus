@@ -1,14 +1,19 @@
 import pandas as pd
 
 
-from .download import get_new_frames, get_frames
+from .download import get_new_frames
+# from .download import get_frames
 
 
 cases_by_geolevel, geography = get_new_frames()
 # cases_by_geolevel, geography = get_frames()
 
 
-def get_cases(geolevel: str, cases_type: str):
+def get_cases(geolevel: str, cases_type: str) -> pd.DataFrame:
+    """
+    Returns a DataFrame with cases of specific type broken down by specific geographical level.
+    This is fast - not downloading anything.
+    """
     return cases_by_geolevel[geolevel][cases_type]
 
 
