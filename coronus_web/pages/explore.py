@@ -70,15 +70,16 @@ def table_digest():
 
 def make_map_figure():
     # https://plot.ly/python/v3/animations/
-    active = get_cases("state", "active")
+    geo_level = "state"
+    active = get_cases(geo_level, "total")
 
     df_plot = active.unstack()
     df_plot = pd.concat([
         df_plot.rename("cases"),
         np.log10(df_plot).rename("log10(cases)")
-    ], axis=1).fillna(0).reset_index()
+    ], axis=1).replace(-np.inf, np.nan).fillna(0).reset_index()
     df_plot.date = df_plot.date.map(lambda x: str(x.date()))
-    df_plot = df_plot.merge(geography[["state", "lat", "long", "continent", "country"]], on="state", how="inner")
+    df_plot = df_plot.merge(geography[["state", "lat", "long", "continent", "country"]], on=geo_level, how="inner")
 
     fig = px.scatter_mapbox(
         data_frame=df_plot,
@@ -87,16 +88,16 @@ def make_map_figure():
         size="log10(cases)",
         # color="continent",
         color="log10(cases)",
-        hover_name="state",
+        hover_name=geo_level,
         hover_data=["cases", "country"],
         animation_frame="date",
-        animation_group="state",
+        animation_group=geo_level,
         color_continuous_scale="sunset",
         height=750,
     )
     ticks = np.arange(0, 10)
     fig.update_layout(coloraxis_colorbar=dict(
-        title="Cases",
+        title="Total cases",
         tickvals=ticks,
         ticktext=list(map(human_format,  10**ticks))
     ))
@@ -158,7 +159,7 @@ plots = [
          "For countries with many weeks of history, we observe initial exponential growth that ultimately plateaus. "
          "We can try to predict this pattern for countries in earlier stages of epidemy. \n\n "
          
-         # TODO move to a separate g(r)ay paragraph
+         # TODO move to a separate gray paragraph
          
          "Hints: Logarithmic scale helps when comparing countries with very different scales of the contagion (e.g. Spain and Portugal). "
          "When plotted on a log scale, exponential trends are straight lines - the steepness of the line corresponds to the growth rate. "
@@ -180,7 +181,7 @@ plots = [
                 html.Span(["Breakdown by:"], className='value-select-label'),
                 dcc.RadioItems(
                     id="breakdown_radio",
-                    options=[{"label": geo_level, "value": geo_level} for geo_level in GEO_LEVELS],
+                    options=[{"label": geo_level, "value": geo_level} for geo_level in GEO_LEVELS[1:]],
                     value="country",
                     persistence=True,
                 ),
@@ -232,7 +233,7 @@ plots = [
          "Hint: you can tick/untick *align growths* to plot growths against days since outbreak or date. In the second case "
          "the growth will match to the plot above. "
          ""),
-    plot("map_plot", "Spatial progression of the spread", figure=make_map_figure())
+    plot("map_plot", "How have the virus spread?", figure=make_map_figure())
 
 ]
 layout = intro + plots
@@ -278,11 +279,9 @@ def make_plots(regions, smoothing, checkboxes, case_type, geo_level):
 
         cases_fig.update_layout(
             yaxis_type="log" if log_y else None,
-            legend={"bgcolor": "rgba(0,0,0,0)"},
         )
         growths_fig.update_layout(
             yaxis={"tickformat": '.1{}'.format("%")},
-            legend={"bgcolor": "rgba(0,0,0,0)"}
         )
 
     else:

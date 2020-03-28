@@ -17,9 +17,9 @@ GEO_LEVELS = [
 ]
 
 CASE_TYPES = [
+    "total",
     "active",
     "deaths",
-    "confirmed",
     "recovered",
     # "tested",
     # "active_derived",
@@ -61,7 +61,7 @@ def get_frames() -> (pd.DataFrame, pd.DataFrame):
 
     cases = cases.rename(columns={
         "country": "country_code",
-        "cases": "confirmed",
+        "cases": "total",
     })
     cases["global"] = "global"
 
@@ -74,7 +74,7 @@ def get_frames() -> (pd.DataFrame, pd.DataFrame):
     )
 
     geography = cases[GEO_LEVELS + ["country_code", "lat", "long", "population"]].drop_duplicates(GEO_LEVELS)
-    cases["active_derived"] = (cases["confirmed"] - cases["recovered"] - cases["deaths"])
+    cases["active_derived"] = (cases["total"] - cases["recovered"] - cases["deaths"])
 
     cases_by_geolevel = {
         geo_level:
@@ -93,8 +93,9 @@ def get_frames() -> (pd.DataFrame, pd.DataFrame):
 
 ################################## OLD ########################################
 
+
 urls = dict(
-    confirmed="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv",
+    total="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv",
     recovered="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv",
     deaths="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv",
 )
@@ -147,7 +148,7 @@ def to_spacetime(df, geolevel: str):
 
 
 def calculate_active(spacetime_dict):
-    active = spacetime_dict["confirmed"] - spacetime_dict["recovered"] - spacetime_dict["deaths"]
+    active = spacetime_dict["total"] - spacetime_dict["recovered"] - spacetime_dict["deaths"]
     return active.replace(0, np.nan)
 
 
@@ -160,10 +161,10 @@ def get_old_frames():
         for case_type, url in urls.items()
     }
 
-    geography = cases_raw["confirmed"][GEO_LEVELS + ["lat", "long"]]
+    geography = cases_raw["total"][GEO_LEVELS + ["lat", "long"]]
     cases_by_geolevel = dict()
     for geolevel in GEO_LEVELS:
-        spacetime = {count_type: to_spacetime(cases_raw[count_type], geolevel=geolevel) for count_type in cases_raw.keys()}
+        spacetime = {case_type: to_spacetime(cases_raw[case_type], geolevel=geolevel) for case_type in cases_raw.keys()}
         spacetime["active"] = calculate_active(spacetime)
         cases_by_geolevel[geolevel] = spacetime
 
