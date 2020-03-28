@@ -101,7 +101,7 @@ p {
  */
 
 #div_dd {
-    grid-column: span 12;
+    grid-column: span 8;
     grid-row: span 1;
     border: 1px solid #c0c0c0;
     border-radius: 4px;
