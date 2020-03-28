@@ -192,7 +192,7 @@ plots = [
             ], className='value-select input-container'),
 
             html.Div([
-                html.Span(["Plotting options:"], className='value-select-label'),
+                html.Span(["Advanced options:"], className='value-select-label'),
                 dcc.Checklist(
                     id="cases_checkbox",
                     className="input-container",
@@ -233,7 +233,7 @@ plots = [
          "Hint: you can tick/untick *align growths* to plot growths against days since outbreak or date. In the second case "
          "the growth will match to the plot above. "
          ""),
-    plot("map_plot", "How have the virus spread?", figure=make_map_figure())
+    plot("map_plot", "How has the virus spread?", figure=make_map_figure())
 
 ]
 layout = intro + plots
@@ -246,7 +246,7 @@ def make_dropdown(geo_level):
     dd_options = [dict(label=x, value=x) for x in sorted(geography[geo_level].dropna().unique())]
     DEFAULT_REGIONS = {
         "state": ["Ontario"],
-        "country": ["United Kingdom", "Italy", "US", "Korea, South", "Spain"],
+        "country": ["United Kingdom", "Italy", "US", "China", "Spain"],
         "continent": ["Asia", "Africa", "Europe", "Oceania", "North America", "South America"],
         "global": ["global"],
     }
