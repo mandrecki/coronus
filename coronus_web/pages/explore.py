@@ -245,13 +245,12 @@ layout = intro + plots
 def make_dropdown(geo_level):
     dd_options = [dict(label=x, value=x) for x in sorted(geography[geo_level].dropna().unique())]
     DEFAULT_REGIONS = {
-        "state": ["Hubei"],
-        "country": ["Poland"],
-        "continent": ["Europe"],
+        "state": ["Ontario"],
+        "country": ["United Kingdom", "Italy", "US", "Korea, South", "Spain"],
+        "continent": ["Asia", "Africa", "Europe", "Oceania", "North America", "South America"],
         "global": ["global"],
     }
     regions = DEFAULT_REGIONS[geo_level]
-
 
     return [dd_options, geo_level, regions]
 
