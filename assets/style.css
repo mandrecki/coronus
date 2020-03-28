@@ -100,15 +100,6 @@ p {
  * Explore
  */
 
-#div_dd {
-    grid-column: span 8;
-    grid-row: span 1;
-    border: 1px solid #c0c0c0;
-    border-radius: 4px;
-    background: #f0f0f0;
-    padding: 2em;
-}
-
 .graph-container {
     grid-column: span 12;
     grid-row: span 1;
@@ -148,6 +139,15 @@ p {
 
 .stats-digest .yesterday {
   color: #777;
+}
+
+#div_dd {
+    grid-column: 5 / 9;
+    grid-row: span 1;
+    border: 1px solid #c0c0c0;
+    border-radius: 4px;
+    background: #f0f0f0;
+    padding: 2em;
 }
 
 .input-container {
