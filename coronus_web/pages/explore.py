@@ -72,7 +72,7 @@ def table_digest():
 
 def make_map_figure():
     # https://plot.ly/python/v3/animations/
-    active = get_cases("country", "active")
+    active = get_cases("state", "active")
 
     df_plot = active.unstack()
     df_plot = pd.concat([
@@ -80,7 +80,7 @@ def make_map_figure():
         np.log10(df_plot).rename("log10(cases)")
     ], axis=1).fillna(0).reset_index()
     df_plot.date = df_plot.date.map(lambda x: str(x.date()))
-    df_plot = df_plot.merge(geography[["state", "lat", "long", "continent", "country"]], on="country", how="inner")
+    df_plot = df_plot.merge(geography[["state", "lat", "long", "continent", "country"]], on="state", how="inner")
 
     fig = px.scatter_mapbox(
         data_frame=df_plot,
@@ -89,10 +89,10 @@ def make_map_figure():
         size="log10(cases)",
         # color="continent",
         color="log10(cases)",
-        hover_name="country",
+        hover_name="state",
         hover_data=["cases", "country"],
         animation_frame="date",
-        animation_group="country",
+        animation_group="state",
         color_continuous_scale="sunset",
         height=750,
     )

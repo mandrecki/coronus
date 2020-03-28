@@ -21,7 +21,7 @@ CASE_TYPES = [
     "deaths",
     "confirmed",
     "recovered",
-    "tested",
+    # "tested",
     # "active_derived",
 ]
 
@@ -92,78 +92,79 @@ def get_frames() -> (pd.DataFrame, pd.DataFrame):
 
 
 ################################## OLD ########################################
-#
-# urls = dict(
-#     confirmed="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv",
-#     recovered="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv",
-#     deaths="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv",
-# )
-#
-# def get_continents():
-#     stream = resource_stream(coronus_web.__name__, "data/country_to_continent.csv")
-#     df = pd.read_csv(stream, encoding = "iso-8859-1")
-#     return df
-#
-#
-# def append_continents(cases, continents):
-#     cases_with_continents = cases.merge(
-#         continents,
-#         on="country",
-#         how="left")
-#     # Avoid failure if new countries were added that we are not handling yet
-#     cases_with_continents = cases_with_continents.fillna("Unassigned")
-#     if "Unassigned" in cases_with_continents.continent:
-#         logging.warning("Country without a continent! Add row to data/country_to_continent.csv \n"
-#                         "{}".format(cases_with_continents[cases_with_continents.Continent == "Unassigned"].country))
-#
-#     return cases_with_continents
-#
-#
-# def get_raw_df(url):
-#     #     s = requests.get(url).content
-#     #     df = pd.read_csv(io.StringIO(s.decode('utf-8')))
-#     df = pd.read_csv(url)
-#     df = df.rename(columns={
-#         "Province/State": "state",
-#         "Country/Region": "country",
-#         "Lat": "lat",
-#         "Long": "long",
-#     })
-#     df["global"] = "global"
-#     df.loc[df["state"].isna(), "state"] = df.loc[df["state"].isna(), "country"]
-#     return df
-#
-#
-# def to_spacetime(df, geolevel: str):
-#     drop_cols = GEO_LEVELS + ["lat", "long"]
-#     drop_cols.remove(geolevel)
-#     df = df.drop(columns=drop_cols)
-#     df = df.groupby(geolevel).sum()
-#     df = df.T
-#     df.index.name = "date"
-#     df.index = pd.to_datetime(df.index)
-#     return df
-#
-#
-# def calculate_active(spacetime_dict):
-#     active = spacetime_dict["confirmed"] - spacetime_dict["recovered"] - spacetime_dict["deaths"]
-#     return active.replace(0, np.nan)
-#
-#
-# def get_frames():
-#     continents = get_continents()
-#
-#     cases_raw = {
-#         case_type:
-#             append_continents(get_raw_df(url), continents)
-#         for case_type, url in urls.items()
-#     }
-#
-#     geography = cases_raw["confirmed"][GEO_LEVELS + ["lat", "long"]]
-#     cases_by_geolevel = dict()
-#     for geolevel in GEO_LEVELS:
-#         spacetime = {count_type: to_spacetime(cases_raw[count_type], geolevel=geolevel) for count_type in cases_raw.keys()}
-#         spacetime["active"] = calculate_active(spacetime)
-#         cases_by_geolevel[geolevel] = spacetime
-#
-#     return cases_by_geolevel, geography
+
+urls = dict(
+    confirmed="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv",
+    recovered="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv",
+    deaths="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv",
+)
+
+
+def get_continents():
+    stream = resource_stream(coronus_web.__name__, "data/country_to_continent.csv")
+    df = pd.read_csv(stream, encoding = "iso-8859-1")
+    return df
+
+
+def append_continents(cases, continents):
+    cases_with_continents = cases.merge(
+        continents,
+        on="country",
+        how="left")
+    # Avoid failure if new countries were added that we are not handling yet
+    cases_with_continents = cases_with_continents.fillna("Unassigned")
+    if "Unassigned" in cases_with_continents.continent:
+        logging.warning("Country without a continent! Add row to data/country_to_continent.csv \n"
+                        "{}".format(cases_with_continents[cases_with_continents.Continent == "Unassigned"].country))
+
+    return cases_with_continents
+
+
+def get_raw_df(url):
+    #     s = requests.get(url).content
+    #     df = pd.read_csv(io.StringIO(s.decode('utf-8')))
+    df = pd.read_csv(url)
+    df = df.rename(columns={
+        "Province/State": "state",
+        "Country/Region": "country",
+        "Lat": "lat",
+        "Long": "long",
+    })
+    df["global"] = "global"
+    df.loc[df["state"].isna(), "state"] = df.loc[df["state"].isna(), "country"]
+    return df
+
+
+def to_spacetime(df, geolevel: str):
+    drop_cols = GEO_LEVELS + ["lat", "long"]
+    drop_cols.remove(geolevel)
+    df = df.drop(columns=drop_cols)
+    df = df.groupby(geolevel).sum()
+    df = df.T
+    df.index.name = "date"
+    df.index = pd.to_datetime(df.index)
+    return df
+
+
+def calculate_active(spacetime_dict):
+    active = spacetime_dict["confirmed"] - spacetime_dict["recovered"] - spacetime_dict["deaths"]
+    return active.replace(0, np.nan)
+
+
+def get_old_frames():
+    continents = get_continents()
+
+    cases_raw = {
+        case_type:
+            append_continents(get_raw_df(url), continents)
+        for case_type, url in urls.items()
+    }
+
+    geography = cases_raw["confirmed"][GEO_LEVELS + ["lat", "long"]]
+    cases_by_geolevel = dict()
+    for geolevel in GEO_LEVELS:
+        spacetime = {count_type: to_spacetime(cases_raw[count_type], geolevel=geolevel) for count_type in cases_raw.keys()}
+        spacetime["active"] = calculate_active(spacetime)
+        cases_by_geolevel[geolevel] = spacetime
+
+    return cases_by_geolevel, geography

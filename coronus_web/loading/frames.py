@@ -2,11 +2,11 @@ import pandas as pd
 
 
 from .download import get_frames
-# from .download import get_frames
+from .download import get_old_frames
 
 
-cases_by_geolevel, geography = get_frames()
 # cases_by_geolevel, geography = get_frames()
+cases_by_geolevel, geography = get_old_frames()
 
 
 def get_cases(geolevel: str, cases_type: str) -> pd.DataFrame:
