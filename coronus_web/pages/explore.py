@@ -32,19 +32,17 @@ df_perc_changes_quantiles = {col: get_quantiles(df_perc_changes, col) for col in
 
 
 def digest_for(aggregation):
-
-    if aggregation != "Active cases":
-        today = df_aggregations[aggregation][-1]
-        today_clr = digest_color_scheme[df_aggregations_quantiles[aggregation][-1]] if aggregation != 'Total cases' else None
-        yesterday = df_aggregations[aggregation][-2]
-        perc_change = df_perc_changes[aggregation][-1] * 100 - 100
-        perc_change_clr = digest_color_scheme[df_perc_changes_quantiles[aggregation][-1]]
-    else:
-        today_clr = "rgba(100,100,100,100)"
-        perc_change_clr = "rgba(100,100,100,100)"
-        today = 0
-        yesterday = 0
-        perc_change = np.nan
+    today = df_aggregations[aggregation][-1]
+    today_clr = digest_color_scheme[df_aggregations_quantiles[aggregation][-1]] if aggregation != 'Total cases' else None
+    yesterday = df_aggregations[aggregation][-2]
+    perc_change = df_perc_changes[aggregation][-1] * 100 - 100
+    perc_change_clr = digest_color_scheme[df_perc_changes_quantiles[aggregation][-1]]
+    # if active cases are not available
+    #     today_clr = "rgba(100,100,100,100)"
+    #     perc_change_clr = "rgba(100,100,100,100)"
+    #     today = 0
+    #     yesterday = 0
+    #     perc_change = np.nan
 
     return html.P([
         f"{aggregation}: ",
