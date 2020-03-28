@@ -20,7 +20,7 @@ from ..analysis.preprocessing import cases_to_growths
 from ..plotting.plots import plot_interactive_df, human_format
 from ..loading.download import GEO_LEVELS, CASE_TYPES
 
-digest_color_scheme = px.colors.diverging.RdYlGn_r[2:-2]
+digest_color_scheme = px.colors.diverging.RdYlGn_r[1:-1]
 
 
 def get_quantiles(df, col):
@@ -60,7 +60,7 @@ def table_digest():
     latest_date = df_aggregations.index[-1]
     return html.Div([
         html.H2([
-            "Latest stats ",
+            "Daily stats ",
             html.Span("({})".format(latest_date.strftime('%d %b %Y')))
         ]),
         digest_for('Active cases'),
