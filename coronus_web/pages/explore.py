@@ -181,7 +181,7 @@ plots = [
                 html.Span(["Breakdown by:"], className='value-select-label'),
                 dcc.RadioItems(
                     id="breakdown_radio",
-                    options=[{"label": geo_level, "value": geo_level} for geo_level in GEO_LEVELS[1:]],
+                    options=[{"label": geo_level.capitalize(), "value": geo_level} for geo_level in GEO_LEVELS[1:]],
                     value="country",
                     persistence=True,
                 ),

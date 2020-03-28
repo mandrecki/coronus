@@ -158,14 +158,14 @@ p {
 
 .input-container label {
     font-size: 1em;
-    margin-right: 1em;
+    margin-right: 1.5em;
     margin-bottom: 0;
 }
 
-.input-container input[type=checkbox] {
-    height: 2em;
-    vertical-align: middle;
-    margin-right: 0.3em;
+.input-container input[type=checkbox], .input-container input[type=radio] {
+    margin-right: 0.2em;
+    position: relative;
+    bottom: -0.1em;
 }
 
 .value-select .value-select-label {
