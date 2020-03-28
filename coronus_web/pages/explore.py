@@ -189,30 +189,28 @@ plots = [
             html.Div([
                 html.Span(["Select regions:"], className='value-select-label'),
                 dcc.Dropdown(id="regions_dd", multi=True)
-            ], className='value-select input-container'),
-
+            ], className='value-select input-container input-container-long'),
             html.Div([
-                html.Span(["Advanced options:"], className='value-select-label'),
-                dcc.Checklist(
-                    id="cases_checkbox",
-                    className="input-container",
-                    options=[
-                        {'label': 'Log scale y', 'value': "log_y"},
-                        {'label': 'Align growths', 'value': "align"},
-                    ],
-                    value=["align"],
-                    persistence=True
-                ),
-                daq.NumericInput(
-                    id="smoothing_growth",
-                    className="input-container",
-                    label="Smoothing",
-                    min=1,
-                    max=10,
-                    value=2,
-                ),
-            ], className='value-select input-container'),
-
+                html.P(["Advanced options:"]),
+                html.Div([
+                    dcc.Checklist(
+                        id="cases_checkbox",
+                        options=[
+                            {'label': 'Log scale y', 'value': "log_y"},
+                            {'label': 'Align growths', 'value': "align"},
+                        ],
+                        value=["align"],
+                        persistence=True
+                    ),
+                    daq.NumericInput(
+                        id="smoothing_growth",
+                        label="Smoothing",
+                        min=1,
+                        max=10,
+                        value=2,
+                    )
+                ], className='input-container-line')
+            ], className='input-container input-container-long')
         ],
         id="div_dd"
     ),
