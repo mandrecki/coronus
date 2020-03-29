@@ -260,9 +260,7 @@ display: none !important;
 }
 
 @media (min-width: 780px) {
-    .home .main-header {/*
-        display: grid;
-        grid-template-columns: repeat(12, 1fr); */
+    .home .main-header {
         background: url('/assets/hero-2300.gif');
         background-size: 100%;
         background-position: bottom;
@@ -304,7 +302,7 @@ display: none !important;
 }
 
 @media (max-width: 780px) {
-    .home .main-header {
+    .main-header, .home .main-header {
         font-size: 1em;
     }
 
