@@ -20,7 +20,7 @@ from ..analysis.preprocessing import cases_to_growths
 from ..plotting.plots import plot_interactive_df, human_format
 from ..loading.download import GEO_LEVELS, CASE_TYPES
 
-digest_color_scheme = px.colors.diverging.RdYlGn_r[1:-1]
+digest_color_scheme = px.colors.diverging.RdYlGn_r[:3] + px.colors.diverging.RdYlGn_r[-3:]
 
 
 def get_quantiles(df, col):
