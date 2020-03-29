@@ -81,6 +81,10 @@ p {
     margin: 0 auto;
 }
 
+#page-content .full-width {
+    grid-column: span 12;
+}
+
 #footer {
     background: #333;
     padding: 1em 0 3em 0;
@@ -100,11 +104,6 @@ p {
 /*
  * Explore
  */
-
-.graph-container {
-    grid-column: span 12;
-    grid-row: span 1;
-}
 
 #page-content .intro {
     grid-column: span 12;
@@ -140,6 +139,31 @@ p {
 
 .stats-digest .yesterday {
   color: #777;
+}
+
+.graph-container {
+    grid-column: span 12;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 3em;
+}
+
+.graph-container h2 {
+    grid-column: span 3;
+}
+
+.graph-container .description {
+    grid-column: span 3;
+}
+
+.graph-container .hint {
+    grid-column: span 3;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.graph-container .graph {
+    grid-column: span 3;
 }
 
 #div_dd {
@@ -225,6 +249,15 @@ display: none !important;
     text-decoration: none;
 }
 
+@media (min-width: 1300px) {
+.graph-container .description {
+    grid-column: span 2;
+}
+
+.graph-container .hint {
+    grid-column: span 1;
+}
+}
 
 @media (min-width: 780px) {
     .home .main-header {/*
@@ -250,7 +283,7 @@ display: none !important;
     }
 }
 
-@media (min-width: 780px and width: 1600px) {
+@media (min-width: 780px and max-width: 1600px) {
     .home .main-header {
         background-image: url('/assets/hero-1600.gif');
     }

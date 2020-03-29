@@ -108,18 +108,18 @@ def make_map_figure():
     return fig
 
 
-def plot(graph_id, title, description=None, figure=None):
+def plot(graph_id, title, description=None, hint=None, figure=None):
     if figure is not None:
-        graph = dcc.Graph(id=graph_id, className='graph', figure=figure)
+        graph = dcc.Graph(id=graph_id, figure=figure)
     else:
-        graph = dcc.Graph(id=graph_id, className='graph')
+        graph = dcc.Graph(id=graph_id)
 
-    children = [
-        html.H2(title),
-        dcc.Loading(graph, style={"height": 600})
-    ]
+    children = [html.H2(title)]
     if description is not None:
-        children.insert(1, dcc.Markdown(description))
+        children.append(dcc.Markdown(description, className='description'))
+    if hint is not None:
+        children.append(html.P(hint, className='hint'))
+    children.append(dcc.Loading(graph, className='graph', style={"height": 600}))
 
     return html.Div(className='graph-container', children=children)
 
@@ -136,7 +136,9 @@ intro = [
             "We use machine learning methodology to forecast the future extent and impact of the ongoing pandemy. "
             "World's governments are now making crucial decisions that will affect nearly everybody on the planet. "
             "How much effort should be placed on preventing further spread? To what extent should we be willing to sacrifice stability of our economies? "
-            "The challenge of balancing the trade-offs is excarbated by the uncertainty. \n\n"
+            "The challenge of balancing the trade-offs is excarbated by the uncertainty."
+        ]),
+        html.P([
             "Some nations were unlucky to experience COVID-19 early, when little was known. "
             "But those who follow, should learn from their successes and mistakes. "
             "As data scientists we feel obligated to drive the uncertainty down and aggregate whatever insights may be valuable for the decision-makers. "
@@ -151,17 +153,14 @@ intro = [
 plots = [
     # TODO make legends transparent
     plot("cases_plot", 'Focus on the active cases',
-         "How many people will get infected in the next month depends on how many people carry the virus now, not in January. "
+         description="How many people will get infected in the next month depends on how many people carry the virus now, not in January. "
          "That is why we focus our attention on the number of active cases and its evolution (rather than the total number of cases to date). "
          "By considering active cases you will notice that the contagion is on the verge of receding in some countries (South Korea or Singapore). "
-         "China is on a promising path towards recovery. "
+         "China is on a promising path towards recovery. \n\n"
          "Using the dropdown below you can compare how quickly the virus has spread through countries. "
          "For countries with many weeks of history, we observe initial exponential growth that ultimately plateaus. "
-         "We can try to predict this pattern for countries in earlier stages of epidemy. \n\n "
-         
-         # TODO move to a separate gray paragraph
-         
-         "Hints: Logarithmic scale helps when comparing countries with very different scales of the contagion (e.g. Spain and Portugal). "
+         "We can try to predict this pattern for countries in earlier stages of epidemy.",
+         hint="Hints: Logarithmic scale helps when comparing countries with very different scales of the contagion (e.g. Spain and Portugal). "
          "When plotted on a log scale, exponential trends are straight lines - the steepness of the line corresponds to the growth rate. "
          "You will notice that the curves corresponding to different regions are close to parallel (though not really straight)."
          "That is because the growth rate is similar across countries. This implies we can leverage past data for prognoses. "
@@ -215,22 +214,20 @@ plots = [
         id="div_dd"
     ),
     plot("growth_plot", "Monitor growth or decay",
-         "An epidemy is an exponential phenomenom. Everyday the number of active cases is multiplied by a factor. "
+         description="An epidemy is an exponential phenomenom. Everyday the number of active cases is multiplied by a factor. "
          "If the virus is winning, the number is greater than 1. If we are winning, the number is less than 1. "
          "In this plot, we present a daily percentage change in confirmed active cases. "
          "The horizontal axis indicates the number of days since the ignition of the epidemy in a given region. "
          "Initially, most areas see extremely high daily growths. The number of cases can increase by more than 100%. "
          "This doesn't necessarily mean that the virus is spreading that quickly. In most cases, this number reflects "
-         "the fact that countries test their citizens more diligently. \n\n"
+         "the fact that countries test their citizens more diligently.\n\n"
          
          "Over time the growth stabilises and gradually decays. Ultimately, it goes below 0% (see China) meaning that the virus recedes.  "
          "This graph has the regions aligned on their initial outbreak - you can use that to predict future growths in countries "
          "that have seen the outbreak only recently. Countries that are dealing with the virus for many weeks already can be "
-         "a good reference. \n\n"
-         ""
-         "Hint: you can tick/untick *align growths* to plot growths against days since outbreak or date. In the second case "
-         "the growth will match to the plot above. "
-         ""),
+         "a good reference.",
+         hint="Hint: you can tick/untick *align growths* to plot growths against days since outbreak or date. In the second case "
+         "the growth will match to the plot above. "),
     plot("map_plot", "How has the virus spread?", figure=make_map_figure())
 
 ]
