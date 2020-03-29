@@ -318,6 +318,10 @@ display: none !important;
         font-size: 0.8em;
     }
 
+    #page-content .intro {
+        font-size: 1em;
+    }
+
     #div_dd {
         grid-template-columns: repeat(3, 1fr);
     }
