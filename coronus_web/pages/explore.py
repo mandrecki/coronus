@@ -103,7 +103,7 @@ def make_map_figure():
     ))
     fig.update_layout(mapbox_style="carto-positron",
                       mapbox_zoom=1.25, mapbox_center={"lat": 28.0, "lon": 15.0})
-    fig.update_layout(margin={"r": 20, "t": 0, "l": 20, "b": 0})
+    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 
     return fig
 

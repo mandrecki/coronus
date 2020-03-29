@@ -33,7 +33,7 @@ def plot_interactive_df(df: pd.DataFrame, ylabel: str = "value", title: str = ""
         title=title,
     )
     fig.update_layout(
-        margin={'t': 32},
+        margin={"r": 0, "t": 0, "l": 0, "b": 0},
         yaxis={
             "side": "right",
             'fixedrange': True
