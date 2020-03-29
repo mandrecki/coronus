@@ -11,6 +11,7 @@ import dash_table
 from dash.dependencies import Input, Output, State
 
 from app_def import dash_app
+from coronus_web.pages.explore import plot
 
 from ..loading import df_active, df_conf, df_dead, df_reco, df_aggregations
 from ..analysis.preprocessing import generate_gp_samples
@@ -29,31 +30,15 @@ def generate_gp_figure():
     return fig
 
 
-def plot(graph_id, title, description=None, figure=None):
-    if figure is not None:
-        graph = dcc.Graph(id=graph_id, className='graph', figure=figure)
-    else:
-        graph = dcc.Graph(id=graph_id, className='graph')
-
-    children = [
-        html.H3(title),
-        graph
-    ]
-    if description is not None:
-        children.insert(1, html.P(description))
-
-    return html.Div(className='graph-container', children=children)
-
-
 intro = [
-        plot("we_predict_plot", "Coming soon!",
-             figure=generate_gp_figure()
+        plot("we_predict_plot", "Our predictions - coming soon",
+             description=(
+                 "We are currently working on models that predict the spread of COVID-19. "
+                 "As the models are developed, we will update this page with information about them and their predictions.\n\n"
+                 "You can also provide predictions of your own on the [You predict](/you-predict) page. "
              ),
-    # TODO: Should this have a heading?
-    html.P([
-        "Optimising... Do not rely on these predictions. Learning in progress...",
-    ],
-        className='intro', style={'whiteSpace': 'pre-wrap'}),
+             figure=generate_gp_figure()
+        )
 ]
 
 plots = [
