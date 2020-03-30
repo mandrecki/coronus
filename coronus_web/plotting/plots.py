@@ -2,6 +2,7 @@ import plotly.express as px
 import pandas as pd
 
 def plot_interactive_df(df: pd.DataFrame, ylabel: str = "value", title: str = "", sort_by: str = "", color_map: dict = None):
+    df = df.copy()
 
     if color_map is None:
         color_map = {}
@@ -17,6 +18,9 @@ def plot_interactive_df(df: pd.DataFrame, ylabel: str = "value", title: str = ""
             raise ValueError("Cannot sort by {}".format(sort_by))
     else:
         df_plot = df
+
+    if df.index.name is None:
+        df.index.name = "index"
 
     df_plot = df_plot.reset_index()
 
