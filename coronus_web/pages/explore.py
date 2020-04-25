@@ -14,6 +14,7 @@ import stringcase
 from dash.dependencies import Input, Output, State
 
 from app_def import dash_app
+from coronus_web.loading.frames import df_flu
 
 from ..loading.frames import geography, df_aggregations, df_perc_changes, get_cases
 from ..analysis.preprocessing import cases_to_growths
@@ -228,7 +229,13 @@ plots = [
          "a good reference.",
          hint="Hint: you can tick/untick *align growths* to plot growths against days since outbreak or date. In the second case "
          "the growth will match to the plot above. "),
-    plot("map_plot", "How has the virus spread?", figure=make_map_figure())
+    plot("map_plot", "How has the virus spread?", figure=make_map_figure()),
+    plot("flu_plot", "Learn from past flu outbreaks",
+         description="The SARS-CoV-2 virus shares characteristics with viruses that cause seasonal Influenza outbreaks. "
+         "The graph below shows the weekly number of active cases of all influenza-like illness, non-severe and severe "
+         "acute respiratory infections. This data enables us to see previous Influenza outbreaks in their entirety, which "
+         "we can use to improve our predictions of the current pandemic.",
+         hint="The data comes from the WHO FluMart and does not contain some countries and periods.")
 
 ]
 layout = intro + plots
@@ -250,7 +257,7 @@ def make_dropdown(geo_level):
     return [dd_options, geo_level, regions]
 
 @dash_app.callback(
-    [Output("cases_plot", "figure"), Output("growth_plot", "figure")],
+    [Output("cases_plot", "figure"), Output("growth_plot", "figure"), Output("flu_plot", "figure")],
     [Input("regions_dd", "value"), Input("smoothing_growth", "value"), Input("cases_checkbox", "value"), Input("case_type_radio", "value")],
     [State("breakdown_radio", "value")]
 )
@@ -259,6 +266,7 @@ def make_plots(regions, smoothing, checkboxes, case_type, geo_level):
     log_y = True if "log_y" in checkboxes else False
 
     cases = get_cases(geo_level, case_type)
+    flu_data = df_flu
     if regions:
         cases = cases[regions]
     else:
@@ -281,6 +289,10 @@ def make_plots(regions, smoothing, checkboxes, case_type, geo_level):
     else:
         growths_fig = {}
 
-    return cases_fig, growths_fig
+
+    flu_data = flu_data[flu_data.columns & cases.columns]
+    flu_fig = plot_interactive_df(flu_data, "Flu cases", " ")
+
+    return cases_fig, growths_fig, flu_fig
 
 

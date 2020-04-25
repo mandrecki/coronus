@@ -45,6 +45,29 @@ def get_geo_codes():
     return codes
 
 
+def get_flu_frames() -> pd.DataFrame:
+    """
+    Loads and pivots the WHO FluMart dataset containing weekly influenza-like illness, acute respiratory infection and
+    severe acute respiratory infection data by country,
+    """
+    df = pd.read_csv(resource_stream(coronus_web.__name__, 'data/flumart/data.csv'))
+    df = df[['CONTINENT', 'Country', 'EDATE', 'ILI_CASES', 'ARI_CASES', 'SARI_CASES']]
+    df = df.rename({
+        'CONTINENT': 'Continent',
+        'EDATE': 'End date',
+        'ILI_CASES': 'ILI cases',
+        'ARI_CASES': 'ARI cases',
+        'SARI_CASES': 'SARI cases'}, axis=1)
+    df['Country'] = df['Country'].replace({
+        'Russian Federation': 'Russia',
+        'United States of America': 'US',
+        'Iran (Islamic Republic of)': 'Iran'})
+    df['End date'] = pd.to_datetime(df['End date'], format='%Y-%m-%d')
+    df['Total cases'] = df['ILI cases'].fillna(0) + df['ARI cases'].fillna(0) + df['SARI cases'].fillna(0)
+
+    return df.pivot(index='End date', columns='Country', values='Total cases')
+
+
 def get_frames() -> (pd.DataFrame, pd.DataFrame):
     """
     Generates DataFrames for different cases and geo_levels, as well as geography Dataframe with region naming conventions
