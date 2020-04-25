@@ -266,7 +266,6 @@ def make_plots(regions, smoothing, checkboxes, case_type, geo_level):
     log_y = True if "log_y" in checkboxes else False
 
     cases = get_cases(geo_level, case_type)
-    flu_data = df_flu
     if regions:
         cases = cases[regions]
     else:
@@ -289,9 +288,11 @@ def make_plots(regions, smoothing, checkboxes, case_type, geo_level):
     else:
         growths_fig = {}
 
-
-    flu_data = flu_data[flu_data.columns & cases.columns]
-    flu_fig = plot_interactive_df(flu_data, "Flu cases", " ")
+    flu_fig = None
+    flu_data = get_cases(geo_level, "flu")
+    if flu_data is not None:
+        flu_data = flu_data[flu_data.columns & cases.columns]
+        flu_fig = plot_interactive_df(flu_data, "Flu cases", " ")
 
     return cases_fig, growths_fig, flu_fig
 

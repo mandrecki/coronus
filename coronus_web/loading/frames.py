@@ -1,6 +1,5 @@
 import pandas as pd
 
-from coronus_web.loading.download import get_flu_frames
 from .download import get_frames
 from .download import get_old_frames
 
@@ -22,7 +21,7 @@ df_reco = get_cases(default_geolevel, "recovered")
 df_conf = get_cases(default_geolevel, "total")
 df_dead = get_cases(default_geolevel, "deaths")
 df_active = get_cases(default_geolevel, "active")
-df_flu = get_flu_frames()
+df_flu = get_cases(default_geolevel, "flu")
 
 df_aggregations = pd.concat([
     df_active.sum(axis=1).rename("Active cases"),
