@@ -45,6 +45,32 @@ def get_geo_codes():
     return codes
 
 
+def get_flu_data() -> pd.DataFrame:
+    """
+    Loads and pivots the WHO FluMart dataset containing weekly influenza-like illness, acute respiratory infection and
+    severe acute respiratory infection data by country,
+    """
+    df = pd.read_csv(resource_stream(coronus_web.__name__, 'data/flumart/data.csv'))
+    df = df[['CONTINENT', 'Country', 'EDATE', 'ILI_CASES', 'ARI_CASES', 'SARI_CASES']]
+    df = df.rename({
+        'CONTINENT': 'continent',
+        'Country': 'country',
+        'EDATE': 'End date',
+        'ILI_CASES': 'ILI cases',
+        'ARI_CASES': 'ARI cases',
+        'SARI_CASES': 'SARI cases'}, axis=1)
+    df['country'] = df['country'].replace({
+        'Russian Federation': 'Russia',
+        'United States of America': 'US',
+        'Iran (Islamic Republic of)': 'Iran'})
+    df['End date'] = pd.to_datetime(df['End date'], format='%Y-%m-%d')
+    df['Total cases'] = df['ILI cases'].fillna(0) + df['ARI cases'].fillna(0) + df['SARI cases'].fillna(0)
+    df['global'] = 'global'
+    df = df[df['End date'] < '2020-01-01']
+
+    return df
+
+
 def get_frames() -> (pd.DataFrame, pd.DataFrame):
     """
     Generates DataFrames for different cases and geo_levels, as well as geography Dataframe with region naming conventions
@@ -162,10 +188,14 @@ def get_old_frames():
     }
 
     geography = cases_raw["total"][GEO_LEVELS + ["lat", "long"]]
+    flu_data = get_flu_data()
     cases_by_geolevel = dict()
     for geolevel in GEO_LEVELS:
         spacetime = {case_type: to_spacetime(cases_raw[case_type], geolevel=geolevel) for case_type in cases_raw.keys()}
         spacetime["active"] = calculate_active(spacetime)
+        if geolevel in flu_data.columns:
+            flu_data_for_level = flu_data[[geolevel, 'End date', 'Total cases']].groupby([geolevel, 'End date']).sum().reset_index()
+            spacetime["flu"] = flu_data_for_level.pivot(index='End date', columns=geolevel, values='Total cases')
         cases_by_geolevel[geolevel] = spacetime
 
     return cases_by_geolevel, geography
