@@ -16,7 +16,7 @@ dash_app.title = 'Predict the virus'
 
 header = html.Header(className='main-header', children=[
     html.Div(className='header-content', children=[
-        html.H1(["Predict the virus"]),
+        html.H1(["Predict the virus (DEFUNCT)"]),
         html.P("Explore the spread of COVID-19 and predict its impact", className='strapline'),
         html.Div(className='menu', children=[
             dcc.Link('Explore', className='explore-link', href='/explore'),
@@ -28,7 +28,7 @@ header = html.Header(className='main-header', children=[
 
 footer = html.Div(id='footer', children=[
     html.P([
-        html.A("team@predictvirus.com", href="mailto:team@predictvirus.com", target="_blank"),
+        html.A("marian.andrecki@gmail.com", href="mailto:marian.andrecki@gmail.com", target="_blank"),
         " based on Johns Hopkins University ",
         html.A("open dataset", href="https://github.com/CSSEGISandData/COVID-19", target="_blank")
     ])
