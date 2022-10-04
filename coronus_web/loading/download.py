@@ -71,7 +71,7 @@ def get_flu_data() -> pd.DataFrame:
     return df
 
 
-def get_frames() -> (pd.DataFrame, pd.DataFrame):
+def get_frames():
     """
     Generates DataFrames for different cases and geo_levels, as well as geography Dataframe with region naming conventions
     population and location.
@@ -133,16 +133,19 @@ def get_continents():
     return df
 
 
-def append_continents(cases, continents):
+def append_continents(cases, continents, drop_unassigned=True):
     cases_with_continents = cases.merge(
         continents,
         on="country",
         how="left")
     # Avoid failure if new countries were added that we are not handling yet
-    cases_with_continents = cases_with_continents.fillna("Unassigned")
-    if "Unassigned" in cases_with_continents.continent:
-        logging.warning("Country without a continent! Add row to data/country_to_continent.csv \n"
-                        "{}".format(cases_with_continents[cases_with_continents.Continent == "Unassigned"].country))
+    if drop_unassigned:
+        cases_with_continents = cases_with_continents.dropna(subset=["continent"])
+    else:
+      cases_with_continents = cases_with_continents.fillna("Unassigned")
+      if "Unassigned" in cases_with_continents.continent:
+          logging.warning("Country without a continent! Add row to data/country_to_continent.csv \n"
+                          "{}".format(cases_with_continents[cases_with_continents.Continent == "Unassigned"].country))
 
     return cases_with_continents
 
@@ -150,7 +153,9 @@ def append_continents(cases, continents):
 def get_raw_df(url):
     #     s = requests.get(url).content
     #     df = pd.read_csv(io.StringIO(s.decode('utf-8')))
-    df = pd.read_csv(url)
+    
+    # WARN this is a hack to cut data at the end of the development
+    df = pd.read_csv(url, usecols=range(90))
     df = df.rename(columns={
         "Province/State": "state",
         "Country/Region": "country",
